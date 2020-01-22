@@ -8,9 +8,11 @@ int32_t main()
     const uint32_t win_height(600);
 
     sf::RenderWindow window(sf::VideoMode(win_width, win_height), "ZTyper2");
+    window.setFramerateLimit(60);
 
     Turret turret(win_width / 2U, win_height - 75, 0.0f);
 
+    float time = 0.0f;
 
     while (window.isOpen())
     {
@@ -20,6 +22,10 @@ int32_t main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        time += 0.016f;
+
+        turret.angle = 20.0f * time;
 
         window.clear();
         
