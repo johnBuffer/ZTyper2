@@ -9,7 +9,13 @@ struct Turret : public GameObject, public Drawable
 	Turret() = default;
 	Turret(float x, float y, float angle);
 
-	void aim_at(const Vec2& target_position);
+	void aim_at(const GameObject& target);
+
+	void update(float dt);
 
 	void draw(sf::RenderTarget& target) const override;
+
+	float getDistanceWithTarget() const;
+
+	const GameObject* active_target;
 };

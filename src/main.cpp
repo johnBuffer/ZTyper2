@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "turret.hpp"
+#include "zombie.hpp"
 
 
 int32_t main()
@@ -14,8 +15,13 @@ int32_t main()
 
     float time = 0.0f;
 
+    Zombie test_zombie;
+
+    turret.aim_at(test_zombie);
+
     while (window.isOpen()) {
         const sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+        test_zombie.position = Vec2(mouse_position.x, mouse_position.y);
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -24,8 +30,7 @@ int32_t main()
         }
 
         time += 0.016f;
-
-        turret.aim_at(Vec2(mouse_position.x, mouse_position.y));
+        turret.update(0.016f);
 
         window.clear();
         
