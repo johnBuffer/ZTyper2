@@ -14,18 +14,18 @@ int32_t main()
 
     float time = 0.0f;
 
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
+        const sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
         time += 0.016f;
 
-        turret.angle = 20.0f * time;
+        turret.aim_at(Vec2(mouse_position.x, mouse_position.y));
 
         window.clear();
         

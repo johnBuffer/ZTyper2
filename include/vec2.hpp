@@ -39,6 +39,11 @@ struct Vec2
 		const float length = getLength();
 		return Vec2(x / length, y / length);
 	}
+
+	Vec2 getNormal() const
+	{
+		return Vec2(-y, x);
+	}
 };
 
 
@@ -47,6 +52,8 @@ Vec2 operator+(const Vec2& v1, const Vec2& v2);
 Vec2 operator-(const Vec2& v1, const Vec2& v2);
 
 Vec2 operator*(const Vec2& v, float f);
+
+float dot(const Vec2& v1, const Vec2& v2);
 
 
 
