@@ -19,6 +19,8 @@ struct GameObject
 		: GameObject(Vec2(x, y), angle_)
 	{}
 
+	virtual void update(float dt) {};
+
 	Vec2 position;
 	float angle;
 };

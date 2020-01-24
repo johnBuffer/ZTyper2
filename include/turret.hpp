@@ -11,7 +11,7 @@ struct Turret : public GameObject, public Drawable
 
 	void aim_at(const GameObject& target);
 
-	void update(float dt);
+	void update(float dt) override;
 
 	void draw(sf::RenderTarget& target) const override;
 

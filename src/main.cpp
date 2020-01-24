@@ -15,13 +15,13 @@ int32_t main()
 
     float time = 0.0f;
 
-    Zombie test_zombie;
+    Zombie test_zombie(Vec2(0.0f, 0.0f), turret);
 
     turret.aim_at(test_zombie);
 
     while (window.isOpen()) {
         const sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
-        test_zombie.position = Vec2(mouse_position.x, mouse_position.y);
+        //test_zombie.position = Vec2(mouse_position.x, mouse_position.y);
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -31,10 +31,12 @@ int32_t main()
 
         time += 0.016f;
         turret.update(0.016f);
+        test_zombie.update(0.016f);
 
         window.clear();
         
         turret.draw(window);
+        test_zombie.draw(window);
 
         window.display();
     }
