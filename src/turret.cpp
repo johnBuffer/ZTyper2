@@ -10,9 +10,9 @@ Turret::Turret(float x, float y, float angle)
 {
 }
 
-void Turret::aim_at(const GameObject& target)
+void Turret::aim_at(GameObject::ptr target)
 {
-	active_target = &target;
+	active_target = target;
 }
 
 void Turret::update(float dt)

@@ -1,10 +1,13 @@
 #pragma once
 
 #include "vec2.hpp"
+#include <memory>
 
 
 struct GameObject
 {
+	using ptr = std::shared_ptr<GameObject>;
+
 	GameObject()
 		: position(0.0f, 0.0f)
 		, angle(0.0f)

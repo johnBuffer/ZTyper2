@@ -4,13 +4,15 @@
 
 Zombie::Zombie()
 	: GameObject()
+	, word("")
 	, active_target(nullptr)
 {
 }
 
-Zombie::Zombie(const Vec2& position_, const GameObject& target_)
+Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject::ptr target_)
 	: GameObject(position_, 0.0f)
-	, active_target(&target_)
+	, word(word_)
+	, active_target(target_)
 {
 }
 
@@ -19,7 +21,6 @@ void Zombie::update(float dt)
 	if (active_target) {
 		const float speed = 1.0f;
 		const Vec2 direction = (active_target->position - position).getNormalized();
-
 		position += direction * speed;
 	}
 }
