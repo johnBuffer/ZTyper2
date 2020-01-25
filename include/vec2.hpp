@@ -55,6 +55,8 @@ Vec2 operator*(const Vec2& v, float f);
 
 float dot(const Vec2& v1, const Vec2& v2);
 
+float getDistance(const Vec2& v1, const Vec2& v2);
+
 
 
 

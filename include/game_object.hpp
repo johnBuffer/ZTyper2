@@ -2,6 +2,8 @@
 
 #include "vec2.hpp"
 #include <memory>
+#include <SFML/Graphics.hpp>
+#include <functional>
 
 
 struct GameObject
@@ -22,7 +24,9 @@ struct GameObject
 		: GameObject(Vec2(x, y), angle_)
 	{}
 
-	virtual void update(float dt) {};
+	virtual void update(float dt) {}
+	virtual void draw(sf::RenderTarget& target) const {}
+	virtual bool isDead() const { return true; }
 
 	Vec2 position;
 	float angle;

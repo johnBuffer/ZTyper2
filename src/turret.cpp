@@ -10,9 +10,57 @@ Turret::Turret(float x, float y, float angle)
 {
 }
 
-void Turret::aim_at(GameObject::ptr target)
+void Turret::aim_at(Zombie::ptr target)
 {
 	active_target = target;
+}
+
+void Turret::charTyped(uint32_t code, GameWorld& world)
+{
+	if (active_target) {
+		shoot(code, world);
+	}
+	else {
+		findNewTarget(code);
+	}
+}
+
+void Turret::shoot(uint32_t code, GameWorld& world)
+{
+	char next_letter = active_target->getNextLetter();
+	if (next_letter == code) {
+		active_target->shoot();
+		if (active_target->isDead()) {
+			active_target = nullptr;
+		}
+	}
+}
+
+void Turret::findNewTarget(uint32_t code)
+{
+	std::list<Zombie::ptr> potential_targets;
+
+	for (Zombie::ptr zombie : Zombie::pool) {
+		if (zombie->getNextLetter() == code) {
+			potential_targets.push_back(zombie);
+		}
+	}
+
+	Zombie::ptr next_target = nullptr;
+	float min_dist = -1.0f;
+	for (Zombie::ptr zombie : potential_targets) {
+		const float dist = getDistance(position, zombie->position);
+		if (dist < min_dist || min_dist == -1.0f) {
+			min_dist = dist;
+			next_target = zombie;
+		}
+	}
+
+	if (next_target) {
+		next_target->shoot();
+	}
+
+	active_target = next_target;
 }
 
 void Turret::update(float dt)
@@ -25,7 +73,7 @@ void Turret::update(float dt)
 
 		const float dot_value = dot(to_target, normal);
 
-		const float rotation_speed = 0.05f;
+		const float rotation_speed = 0.15f;
 		angle += dot_value * rotation_speed;
 	}
 }
@@ -60,6 +108,11 @@ void Turret::draw(sf::RenderTarget& target) const
 	target.draw(base);
 	target.draw(laser);
 	target.draw(barrel);
+}
+
+bool Turret::isDead() const
+{
+	return false;
 }
 
 float Turret::getDistanceWithTarget() const
