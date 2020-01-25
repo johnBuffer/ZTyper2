@@ -1,12 +1,12 @@
 #pragma once
 
 #include "game_world.hpp"
-#include "game_object.hpp"
+#include "pooled_game_object.hpp"
 #include "pointer_builder.hpp"
 #include "zombie.hpp"
 
 
-struct Turret : public GameObject, public PointerBuilder<Turret>
+struct Turret : public PooledGameObject<Turret>
 {
 	using ptr = std::shared_ptr<Turret>;
 	Turret() = default;
@@ -25,6 +25,8 @@ struct Turret : public GameObject, public PointerBuilder<Turret>
 
 	float getDistanceWithTarget() const;
 	float getTargetAlignement() const;
+
+	static void init();
 
 	Zombie::ptr active_target;
 	std::vector<Zombie::ptr> waiting_shots;

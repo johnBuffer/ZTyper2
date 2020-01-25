@@ -6,7 +6,7 @@
 
 
 Turret::Turret(float x, float y, float angle)
-	: GameObject(x, y, angle)
+	: PooledGameObject(x, y, angle)
 	, active_target(nullptr)
 	, waiting_shots(0U)
 {
@@ -83,8 +83,8 @@ void Turret::update(float dt)
 void Turret::draw(sf::RenderTarget& target) const
 {
 	const float side_size(50.0f);
-	const float barrel_length(60.0F);
-	const float barrel_width(15.0f);
+	const float barrel_length(150.0F);
+	const float barrel_width(90.0f);
 	
 	// Base
 	sf::RectangleShape base(sf::Vector2f(side_size, side_size));
@@ -94,8 +94,8 @@ void Turret::draw(sf::RenderTarget& target) const
 
 	// Barrel
 	sf::RectangleShape barrel(sf::Vector2f(barrel_length, barrel_width));
+	barrel.setTexture(&resources.getTexture(0));
 	barrel.setOrigin(barrel_length * 0.2f, barrel_width * 0.5f);
-	barrel.setFillColor(sf::Color::Red);
 	barrel.setPosition(position.x, position.y);
 	barrel.setRotation(radToDeg(angle));
 
@@ -138,4 +138,9 @@ float Turret::getTargetAlignement() const
 	const Vec2 normal = turret_vec.getNormal();
 
 	return dot(to_target, normal);
+}
+
+void Turret::init()
+{
+	resources.registerTexture("resources/textures/turret.png");
 }
