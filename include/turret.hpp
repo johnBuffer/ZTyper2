@@ -16,7 +16,7 @@ struct Turret : public GameObject, public PointerBuilder<Turret>
 	void aim_at(Zombie::ptr target);
 	void charTyped(uint32_t code, GameWorld& world);
 	void shoot(uint32_t code, GameWorld& world);
-	void findNewTarget(uint32_t code);
+	void findNewTarget(uint32_t code, GameWorld& world);
 
 	// GameObjects overrides
 	void update(float dt) override;

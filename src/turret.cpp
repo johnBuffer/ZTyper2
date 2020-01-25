@@ -2,6 +2,7 @@
 #include "utils.hpp"
 
 #include <iostream>
+#include "bullet.hpp"
 
 
 Turret::Turret(float x, float y, float angle)
@@ -17,26 +18,28 @@ void Turret::aim_at(Zombie::ptr target)
 
 void Turret::charTyped(uint32_t code, GameWorld& world)
 {
-	if (active_target) {
-		shoot(code, world);
+	if (!active_target) {
+		findNewTarget(code, world);
 	}
-	else {
-		findNewTarget(code);
-	}
+
+	shoot(code, world);
 }
 
 void Turret::shoot(uint32_t code, GameWorld& world)
 {
-	char next_letter = active_target->getNextLetter();
-	if (next_letter == code) {
-		active_target->shoot();
-		if (active_target->isDead()) {
-			active_target = nullptr;
+	if (active_target) {
+		char next_letter = active_target->getNextLetter();
+		if (next_letter == code) {
+			active_target->removeLetter();
+			world.addObject(Bullet::create(position, active_target));
+			if (active_target->isWordDone()) {
+				active_target = nullptr;
+			}
 		}
 	}
 }
 
-void Turret::findNewTarget(uint32_t code)
+void Turret::findNewTarget(uint32_t code, GameWorld& world)
 {
 	std::list<Zombie::ptr> potential_targets;
 
@@ -54,10 +57,6 @@ void Turret::findNewTarget(uint32_t code)
 			min_dist = dist;
 			next_target = zombie;
 		}
-	}
-
-	if (next_target) {
-		next_target->shoot();
 	}
 
 	active_target = next_target;

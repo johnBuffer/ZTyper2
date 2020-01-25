@@ -2,6 +2,7 @@
 #include "turret.hpp"
 #include "zombie.hpp"
 #include "game_engine.hpp"
+#include "bullet.hpp"
 #include <event_manager.hpp>
 
 #include <iostream>
@@ -44,7 +45,7 @@ int32_t main()
 
         event_manager.processEvents();
 
-        std::cout << Zombie::pool.size() << std::endl;
+        //std::cout << Zombie::pool.size() << std::endl;
 
         const float dt = frame_clock.restart().asSeconds();
         time += dt;

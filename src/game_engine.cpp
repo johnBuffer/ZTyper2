@@ -15,6 +15,13 @@ void GameEngine::update(float dt)
 	}
 }
 
+void GameEngine::execute_modules(float dt)
+{
+	for (Module::ptr module : modules) {
+		module->process(dt);
+	}
+}
+
 void GameEngine::render_in(sf::RenderTarget& target) const
 {
 	for (GameObject::ptr object : world.objects) {

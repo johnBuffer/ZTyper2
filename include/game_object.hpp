@@ -3,7 +3,7 @@
 #include "vec2.hpp"
 #include <memory>
 #include <SFML/Graphics.hpp>
-#include <functional>
+#include <cstdint>
 
 
 struct GameObject

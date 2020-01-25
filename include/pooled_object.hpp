@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 #include <memory>
 
 
@@ -12,11 +12,11 @@ struct PooledObject
 
 	static void remove(const T& obj);
 
-	static std::list<std::shared_ptr<T>> pool;
+	static std::vector<std::shared_ptr<T>> pool;
 };
 
 template<typename T>
-std::list<std::shared_ptr<T>> PooledObject<T>::pool;
+std::vector<std::shared_ptr<T>> PooledObject<T>::pool;
 
 template<typename T>
 template<typename ...Args>
@@ -30,5 +30,13 @@ inline std::shared_ptr<T> PooledObject<T>::create(Args&& ...args)
 template<typename T>
 inline void PooledObject<T>::remove(const T& obj_to_remove)
 {
-	pool.remove_if([&](std::shared_ptr<T> obj) {return &(*obj) == &obj_to_remove; });
+	const uint64_t pool_size = pool.size();
+	for (uint64_t i(0U); i < pool_size; ++i) {
+		std::shared_ptr<T>& obj = pool[i];
+		if (&(*obj) == &obj_to_remove) {
+			std::swap(obj, pool.back());
+			pool.pop_back();
+			break;
+		}
+	}
 }

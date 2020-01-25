@@ -15,6 +15,8 @@ struct Zombie : public PooledGameObject<Zombie>
 
 	char getNextLetter() const;
 	void shoot();
+	void removeLetter();
+	bool isWordDone() const;
 
 	// GameObject overrides
 	void update(float dt) override;
@@ -23,6 +25,7 @@ struct Zombie : public PooledGameObject<Zombie>
 
 	static void loadFont(const std::string& font_location);
 
+	uint32_t life;
 	std::string word;
 	GameObject::ptr active_target;
 	static sf::Font font;

@@ -7,6 +7,7 @@ Zombie::Zombie()
 	: PooledGameObject()
 	, word("")
 	, active_target(nullptr)
+	, life(0U)
 {
 }
 
@@ -14,6 +15,7 @@ Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject::ptr 
 	: PooledGameObject(position_, 0.0f)
 	, word(word_)
 	, active_target(target_)
+	, life(word_.size())
 {
 }
 
@@ -28,18 +30,28 @@ char Zombie::getNextLetter() const
 
 void Zombie::shoot()
 {
+	--life;
+}
+
+void Zombie::removeLetter()
+{
 	word = word.substr(1);
+}
+
+bool Zombie::isWordDone() const
+{
+	return word.empty();
 }
 
 bool Zombie::isDead() const
 {
-	return word.empty();
+	return !life;
 }
 
 void Zombie::update(float dt)
 {
 	if (active_target) {
-		const float speed = 1.0f;
+		const float speed = 0.5f;
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
 	}
