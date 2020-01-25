@@ -14,7 +14,7 @@ struct Turret : public GameObject, public PointerBuilder<Turret>
 	
 	// Turret specific
 	void aim_at(Zombie::ptr target);
-	void charTyped(uint32_t code, GameWorld& world);
+	void charTyped(uint32_t code);
 	void shoot(uint32_t code, GameWorld& world);
 	void findNewTarget(uint32_t code, GameWorld& world);
 
@@ -24,6 +24,8 @@ struct Turret : public GameObject, public PointerBuilder<Turret>
 	bool isDead() const override;
 
 	float getDistanceWithTarget() const;
+	float getTargetAlignement() const;
 
 	Zombie::ptr active_target;
+	std::vector<Zombie::ptr> waiting_shots;
 };

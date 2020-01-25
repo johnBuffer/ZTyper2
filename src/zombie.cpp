@@ -82,6 +82,11 @@ void Zombie::draw(sf::RenderTarget& target) const
 	target.draw(text);
 }
 
+void Zombie::init()
+{
+	Zombie::loadFont("font_med.ttf");
+}
+
 void Zombie::loadFont(const std::string& font_location)
 {
 	Zombie::font.loadFromFile(font_location);

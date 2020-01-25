@@ -23,9 +23,10 @@ struct Zombie : public PooledGameObject<Zombie>
 	void draw(sf::RenderTarget& target) const override;
 	bool isDead() const override;
 
+	static void init();
 	static void loadFont(const std::string& font_location);
 
-	uint32_t life;
+	uint64_t life;
 	std::string word;
 	GameObject::ptr active_target;
 	static sf::Font font;

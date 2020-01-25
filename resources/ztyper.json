@@ -1,0 +1,77 @@
+{
+	"name": "resources",
+	"sprites": [
+		{
+			"name": "zombie_1",
+			"path": "textures/zombie.png",
+			"x": 20,
+			"y": 50,
+			"width": 128,
+			"height": 164
+		},
+		{
+			"name": "zombie_2",
+			"path": "textures/zombie.png",
+			"x": 180,
+			"y": 50,
+			"width": 128,
+			"height": 164
+		},
+		{
+			"name": "zombie_3",
+			"path": "textures/zombie.png",
+			"x": 337,
+			"y": 52,
+			"width": 128,
+			"height": 164
+		},
+		{
+			"name": "blood",
+			"path": "textures/blood.png",
+			"x": 0,
+			"y": 0,
+			"width": 70,
+			"height": 76
+		},
+		{
+			"name": "turret",
+			"path": "textures/turret.png",
+			"x": 0,
+			"y": 0,
+			"width": 161,
+			"height": 371
+		},
+		{
+			"name": "base",
+			"path": "textures/base.png",
+			"x": 0,
+			"y": 0,
+			"width": 151,
+			"height": 143
+		},
+		{
+			"name": "heart",
+			"path": "textures/heart.png",
+			"x": 0,
+			"y": 0,
+			"width": 50,
+			"height": 44
+		},
+		{
+			"name": "explosion",
+			"path": "textures/explosion.png",
+			"x": 0,
+			"y": 0,
+			"width": 1024,
+			"height": 128
+		},
+		{
+			"name": "bullet",
+			"path": "textures/bullet.png",
+			"x": 0,
+			"y": 0,
+			"width": 235,
+			"height": 500
+		}
+	]
+}

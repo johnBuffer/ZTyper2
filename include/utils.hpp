@@ -2,12 +2,6 @@
 
 constexpr float PI = 3.1415928f;
 
-float radToDeg(const float r)
-{
-	return 57.2958f * r;
-}
+float radToDeg(const float r);
 
-float getSign(const float value)
-{
-	return value < 0.0f ? -1.0f : 1.0f;
-}
+float getSign(const float value);

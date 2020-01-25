@@ -10,17 +10,17 @@
 
 int32_t main()
 {
-    const uint32_t win_width(800);
-    const uint32_t win_height(600);
+    const uint32_t win_width(1600);
+    const uint32_t win_height(900);
 
     sf::RenderWindow window(sf::VideoMode(win_width, win_height), "ZTyper2");
     window.setFramerateLimit(60);
 
     // Various initializations
-    Zombie::loadFont("font_med.ttf");
-    GameEngine engine;
+    Zombie::initialize();
+    Bullet::initialize();
 
-    Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, 0.0f);
+    Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, -3.1415926f * 0.5f);
 
     float time = 0.0f;
 
@@ -28,6 +28,7 @@ int32_t main()
     Zombie::ptr zombie_2 = Zombie::create(Vec2(800.0f, 0.0f), "blol", turret);
     Zombie::ptr zombie_3 = Zombie::create(Vec2(400.0f, -50.0f), "clol", turret);
 
+    GameEngine& engine = *GameEngine::getInstance();
     engine.world.addObject(turret);
     engine.world.addObject(zombie_1);
     engine.world.addObject(zombie_2);
@@ -36,7 +37,7 @@ int32_t main()
     // Register events callbacks
     sfev::EventManager event_manager(window);
     event_manager.addEventCallback(sf::Event::Closed, [&](sfev::CstEv) {window.close(); });
-    event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret->charTyped(ev.text.unicode, engine.world); });
+    event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret->charTyped(ev.text.unicode); });
     //event_manager.addKeyPressedCallback(sf::Keyboard::BackSpace, [&](sfev::CstEv ev) {challenge.removeChar(); });
 
     sf::Clock frame_clock;
@@ -45,7 +46,7 @@ int32_t main()
 
         event_manager.processEvents();
 
-        //std::cout << Zombie::pool.size() << std::endl;
+        // std::cout << Bullet::pool.size() << std::endl;
 
         const float dt = frame_clock.restart().asSeconds();
         time += dt;

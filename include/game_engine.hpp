@@ -14,6 +14,10 @@ struct GameEngine
 
 	void render_in(sf::RenderTarget& target) const;
 
+	static GameEngine* getInstance();
+
 	GameWorld world;
 	std::list<Module::ptr> modules;
+
+	static GameEngine* global_instance;
 };

@@ -8,6 +8,7 @@
 Turret::Turret(float x, float y, float angle)
 	: GameObject(x, y, angle)
 	, active_target(nullptr)
+	, waiting_shots(0U)
 {
 }
 
@@ -16,8 +17,9 @@ void Turret::aim_at(Zombie::ptr target)
 	active_target = target;
 }
 
-void Turret::charTyped(uint32_t code, GameWorld& world)
+void Turret::charTyped(uint32_t code)
 {
+	GameWorld& world = GameEngine::getInstance()->world;
 	if (!active_target) {
 		findNewTarget(code, world);
 	}
@@ -31,7 +33,7 @@ void Turret::shoot(uint32_t code, GameWorld& world)
 		char next_letter = active_target->getNextLetter();
 		if (next_letter == code) {
 			active_target->removeLetter();
-			world.addObject(Bullet::create(position, active_target));
+			waiting_shots.push_back(active_target);
 			if (active_target->isWordDone()) {
 				active_target = nullptr;
 			}
@@ -64,16 +66,17 @@ void Turret::findNewTarget(uint32_t code, GameWorld& world)
 
 void Turret::update(float dt)
 {
+	const float target_alignement = getTargetAlignement();
 	if (active_target) {
-		const Vec2& target_position = active_target->position;
-		const Vec2 to_target = (target_position - position).getNormalized();
-		const Vec2 turret_vec(cos(angle), sin(angle));
-		const Vec2 normal = turret_vec.getNormal();
+		const float rotation_speed = 0.5f;
+		angle += target_alignement * rotation_speed;
+	}
 
-		const float dot_value = dot(to_target, normal);
-
-		const float rotation_speed = 0.15f;
-		angle += dot_value * rotation_speed;
+	if (waiting_shots.size()) {
+		if (std::abs(target_alignement) < 0.05f || !active_target) {
+			GameEngine::getInstance()->world.addObject(Bullet::create(position, waiting_shots.back(), angle));
+			waiting_shots.pop_back();
+		}
 	}
 }
 
@@ -121,4 +124,18 @@ float Turret::getDistanceWithTarget() const
 	}
 
 	return (position - active_target->position).getLength();
+}
+
+float Turret::getTargetAlignement() const
+{
+	if (!active_target) {
+		return 1.0f;
+	}
+
+	const Vec2& target_position = active_target->position;
+	const Vec2 to_target = (target_position - position).getNormalized();
+	const Vec2 turret_vec(cos(angle), sin(angle));
+	const Vec2 normal = turret_vec.getNormal();
+
+	return dot(to_target, normal);
 }
