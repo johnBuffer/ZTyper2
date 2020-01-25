@@ -73,8 +73,8 @@ void Turret::update(float dt)
 	}
 
 	if (waiting_shots.size()) {
-		if (std::abs(target_alignement) < 0.05f || !active_target) {
-			GameEngine::getInstance()->world.addObject(Bullet::create(position, waiting_shots.back(), angle));
+		if (std::abs(target_alignement) < 0.1f || !active_target) {
+			GameEngine::getInstance()->world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(0.1f)));
 			waiting_shots.pop_back();
 		}
 	}
