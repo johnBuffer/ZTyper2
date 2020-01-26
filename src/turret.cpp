@@ -5,6 +5,8 @@
 #include "bullet.hpp"
 
 
+Animation Turret::fire_animation;
+
 Turret::Turret(float x, float y, float angle)
 	: PooledGameObject(x, y, angle)
 	, active_target(nullptr)
@@ -117,14 +119,12 @@ void Turret::render() const
 
 	// Fire
 	const float animation_speed = 70.0f;
-	const uint32_t fire_rank = static_cast<uint32_t>(std::min(19.0f, shot_time * animation_speed));
 	const float barrel_dist = barrel_length * 0.5f;
 	auto fire = create_obj<sf::RectangleShape>(sf::Vector2f(fire_length, fire_width));
-	fire->setTexture(&resources.getTexture(2));
-	fire->setTextureRect(sf::IntRect(0, fire_rank * 50, 128, 50));
 	fire->setOrigin(0.0f, fire_width * 0.5f);
 	fire->setPosition(position.x + barrel_dist * cos(angle), position.y + barrel_dist * sin(angle));
 	fire->setRotation(radToDeg(angle));
+	fire_animation.applyOn(fire, animation_speed * shot_time);
 
 	// Laser
 	auto laser = create_obj<sf::VertexArray>(sf::Lines, 2);
@@ -171,4 +171,6 @@ void Turret::init()
 	resources.registerTexture("resources/textures/turret.png");
 	resources.registerTexture("resources/textures/base.png");
 	resources.registerTexture("resources/textures/explosion.png");
+
+	fire_animation = Animation(resources.getTexture(2), 1, 19, 19);
 }

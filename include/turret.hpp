@@ -4,6 +4,7 @@
 #include "pooled_game_object.hpp"
 #include "pointer_builder.hpp"
 #include "zombie.hpp"
+#include "animation.hpp"
 
 
 struct Turret : public PooledGameObject<Turret>
@@ -30,6 +31,8 @@ struct Turret : public PooledGameObject<Turret>
 
 	Zombie::ptr active_target;
 	std::vector<Zombie::ptr> waiting_shots;
+
+	static Animation fire_animation;
 
 	float shot_time;
 	float recoil;
