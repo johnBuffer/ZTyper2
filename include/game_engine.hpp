@@ -28,4 +28,8 @@ struct GameEngine
 	std::list<Module::ptr> modules;
 
 	static GameEngine* global_instance;
+
+private:
+	void updateObjects(float dt);
+	void cleanDeadObjects();
 };

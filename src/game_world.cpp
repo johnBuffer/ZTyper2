@@ -6,6 +6,16 @@ GameWorld::GameWorld()
 {
 }
 
+void GameWorld::lock()
+{
+	add_lock = true;
+}
+
+void GameWorld::unlock()
+{
+	add_lock = false;
+}
+
 void GameWorld::addObject(GameObject::ptr object)
 {
 	if (!add_lock) {

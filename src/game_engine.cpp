@@ -11,18 +11,7 @@ void GameEngine::initialize()
 
 void GameEngine::update(float dt)
 {
-	world.add_lock = true;
-	for (GameObject::ptr object : world.objects) {
-		object->update(dt);
-	}
-
-	for (auto it = world.objects.begin(); it != world.objects.end(); ++it) {
-		if ((*it)->isDead()) {
-			world.objects.erase(it);
-			--it;
-		}
-	}
-	world.add_lock = false;
+	updateObjects(dt);
 	world.addWaitingObjects();
 }
 
@@ -54,4 +43,24 @@ GameEngine& GameEngine::getInstance()
 	}
 	
 	return *global_instance;
+}
+
+void GameEngine::updateObjects(float dt)
+{
+	world.lock();
+	for (GameObject::ptr object : world.objects) {
+		object->update(dt);
+	}
+	cleanDeadObjects();
+	world.unlock();
+}
+
+void GameEngine::cleanDeadObjects()
+{
+	for (auto it = world.objects.begin(); it != world.objects.end(); ++it) {
+		if ((*it)->isDead()) {
+			world.objects.erase(it);
+			--it;
+		}
+	}
 }

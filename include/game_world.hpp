@@ -8,11 +8,17 @@ struct GameWorld
 {
 	GameWorld();
 
+	void lock();
+	void unlock();
+
 	void addObject(GameObject::ptr object);
 	void addWaitingObjects();
 
 	std::vector<GameObject::ptr> objects;
 
-	bool add_lock;
 	std::vector<GameObject::ptr> waiting_add;
+
+private:
+	bool add_lock;
+
 };
