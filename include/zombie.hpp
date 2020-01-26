@@ -20,14 +20,13 @@ struct Zombie : public PooledGameObject<Zombie>
 
 	// GameObject overrides
 	void update(float dt) override;
-	void draw(sf::RenderTarget& target) const override;
+	void render() const override;
+	bool isDone() const override;
 
 	static void init();
-	static void loadFont(const std::string& font_location);
 
 	uint64_t life;
 	std::string word;
+	std::string shot_letters;
 	GameObject::ptr active_target;
-	static sf::Font font;
-	static std::list<Zombie::ptr> zombies;
 };

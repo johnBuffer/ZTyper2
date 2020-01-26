@@ -34,15 +34,11 @@ void Turret::shoot(uint32_t code)
 	if (active_target && code < 128) {
 		const char letter = active_target->getLetter();
 		if (letter == char(code)) {
-			std::cout << char(code) << " == (next) " << letter << std::endl;
 			active_target->removeLetter();
 			waiting_shots.push_back(active_target);
 			if (active_target->isWordDone()) {
 				active_target = nullptr;
 			}
-		}
-		else {
-			std::cout << char(code) << " != (next) " << letter << std::endl;
 		}
 	}
 }
@@ -80,7 +76,7 @@ void Turret::update(float dt)
 	shot_time += dt;
 	const float target_alignement = getTargetAlignement();
 	if (active_target) {
-		const float rotation_speed = 0.15f;
+		const float rotation_speed = 0.3f;
 		angle += target_alignement * rotation_speed;
 	}
 
@@ -98,13 +94,13 @@ void Turret::update(float dt)
 	recoil = recoil > recover_amount ? recoil - recover_amount : 0.0f;
 }
 
-void Turret::draw(sf::RenderTarget& target) const
+void Turret::render() const
 {
 	const float side_size(150.0f);
 	const float barrel_length(170.0F);
 	const float barrel_width(100.0f);
-	const float fire_length(100.0f);
-	const float fire_width(50.0f);
+	const float fire_length(150.0f);
+	const float fire_width(40.0f);
 	
 	// Base
 	auto base = create_obj<sf::RectangleShape>(sf::Vector2f(side_size, side_size));
@@ -121,9 +117,9 @@ void Turret::draw(sf::RenderTarget& target) const
 	barrel->setRotation(radToDeg(angle));
 
 	// Fire
-	const float animation_speed = 40.0f;
+	const float animation_speed = 70.0f;
 	const uint32_t fire_rank = static_cast<uint32_t>(std::min(19.0f, shot_time * animation_speed));
-	const float barrel_dist = barrel_length * 0.6f;
+	const float barrel_dist = barrel_length * 0.5f;
 	auto fire = create_obj<sf::RectangleShape>(sf::Vector2f(fire_length, fire_width));
 	fire->setTexture(&resources.getTexture(2));
 	fire->setTextureRect(sf::IntRect(0, fire_rank * 50, 128, 50));

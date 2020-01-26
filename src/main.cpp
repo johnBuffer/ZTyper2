@@ -3,6 +3,7 @@
 #include "zombie.hpp"
 #include "game_engine.hpp"
 #include "bullet.hpp"
+#include "letter.hpp"
 #include "utils.hpp"
 #include <event_manager.hpp>
 
@@ -43,7 +44,6 @@ int32_t main()
     event_manager.addEventCallback(sf::Event::Closed, [&](sfev::CstEv) {window.close(); });
     event_manager.addKeyReleasedCallback(sf::Keyboard::Space, [&](sfev::CstEv) {turret->resetTarget(); });
     event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret->charTyped(ev.text.unicode); });
-    //event_manager.addKeyPressedCallback(sf::Keyboard::BackSpace, [&](sfev::CstEv ev) {challenge.removeChar(); });
 
     sf::Clock frame_clock;
     float last_zombie = 10.0f;
@@ -59,7 +59,7 @@ int32_t main()
             last_zombie = 0.0f;
         }
 
-        // std::cout << Bullet::pool.size() << std::endl;
+        // std::cout << Letter::pool.size() << std::endl;
 
         const float dt = frame_clock.restart().asSeconds();
         last_zombie += dt;

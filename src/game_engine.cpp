@@ -4,6 +4,11 @@
 GameEngine* GameEngine::global_instance = nullptr;
 
 
+void GameEngine::initialize()
+{
+	resources.registerFont("font_med.ttf");
+}
+
 void GameEngine::update(float dt)
 {
 	world.add_lock = true;
@@ -31,7 +36,7 @@ void GameEngine::execute_modules(float dt)
 void GameEngine::render_in(sf::RenderTarget& target) const
 {
 	for (const GameObject::ptr obj : world.objects) {
-		obj->draw(target);
+		obj->render();
 	}
 	renderer.render(target);
 }
@@ -45,6 +50,7 @@ GameEngine& GameEngine::getInstance()
 {
 	if (!global_instance) {
 		global_instance = new GameEngine();
+		global_instance->initialize();
 	}
 	
 	return *global_instance;

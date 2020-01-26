@@ -15,6 +15,7 @@ struct PooledGameObject : public GameObject, public PooledObject<T>
 	PooledGameObject(Args&& ...args);
 
 	void setDead(T* object);
+	void checkDead(T* object);
 
 	static void initialize();
 	static ResourcesManager resources;
@@ -40,6 +41,15 @@ inline void PooledGameObject<T>::setDead(T* object)
 {
 	dead = true;
 	T::remove(*object);
+}
+
+template<typename T>
+inline void PooledGameObject<T>::checkDead(T* object)
+{
+	if (isDone()) {
+		setDead(object);
+		onDone();
+	}
 }
 
 template<typename T>

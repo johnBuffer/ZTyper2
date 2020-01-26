@@ -21,7 +21,7 @@ struct Turret : public PooledGameObject<Turret>
 
 	// GameObjects overrides
 	void update(float dt) override;
-	void draw(sf::RenderTarget& target) const override;
+	void render() const override;
 
 	float getDistanceWithTarget() const;
 	float getTargetAlignement() const;

@@ -17,26 +17,27 @@ bool Bullet::isDone() const
 
 void Bullet::update(float dt)
 {
-	const float speed = 60.0f;
 	position += direction * speed;
-	if (isDone()) {
-		dead = true;
-		active_target->shoot(direction * (speed * 0.1f));
-		Bullet::remove(*this);
-	}
+	checkDead(this);
 }
 
-void Bullet::draw(sf::RenderTarget& target) const
+void Bullet::render() const
 {
 	const float width = 200.0f;
 	const float height = 30.0f;
-	sf::RectangleShape shape(sf::Vector2f(width, height));
-	shape.setTexture(&resources.getTexture(0));
-	shape.setOrigin(width, height * 0.5f);
-	shape.setRotation(radToDeg(angle));
-	shape.setPosition(position.x, position.y);
+	auto shape = create_obj<sf::RectangleShape>(sf::Vector2f(width, height));
+	shape->setTexture(&resources.getTexture(0));
+	shape->setOrigin(width, height * 0.5f);
+	shape->setRotation(radToDeg(angle));
+	shape->setPosition(position.x, position.y);
 
-	target.draw(shape);
+	GameEngine::getInstance().renderer.addDrawable(shape);
+}
+
+void Bullet::onDone()
+{
+	const float restitution = 0.1f;
+	active_target->shoot(direction * (speed * restitution));
 }
 
 void Bullet::init()

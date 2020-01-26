@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
 
@@ -11,6 +12,8 @@ float radToDeg(const float r);
 float getSign(const float value);
 
 float getRandRange(float width);
+
+float getRandUnder(float max);
 
 template<typename T>
 const T& getRandomElemFromVector(const std::vector<T>& vector)
@@ -26,3 +29,5 @@ static std::shared_ptr<T> create_obj(Args&&... args)
 {
 	return std::make_shared<T>(args...);
 }
+
+float getStringWidth(const std::string str, const sf::Font& font, float char_size);

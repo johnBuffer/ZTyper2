@@ -27,7 +27,9 @@ struct GameObject
 	{}
 
 	virtual void update(float dt) {}
-	virtual void draw(sf::RenderTarget& target) const {}
+	virtual void render() const {}
+	virtual bool isDone() const { return false; }
+	virtual void onDone() {};
 	bool isDead() const { return dead; }
 
 	Vec2 position;

@@ -21,3 +21,22 @@ float getRandRange(float width)
 	const float val = (rand() % max_value - half) * div * width;
 	return val;
 }
+
+float getRandUnder(float max)
+{
+	constexpr int32_t max_value = 10000;
+	constexpr int32_t half = max_value / 2;
+	constexpr float div = 1.0f / float(max_value);
+	const float val = (rand() % max_value) * div * max;
+	return val;
+}
+
+float getStringWidth(const std::string str, const sf::Font& font, float char_size)
+{
+	float result = 0.0f;
+	for (char c : str) {
+		result += font.getGlyph(c, char_size, false).advance;
+	}
+
+	return result;
+}
