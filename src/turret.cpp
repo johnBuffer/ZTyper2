@@ -22,7 +22,6 @@ void Turret::aim_at(Zombie::ptr target)
 void Turret::charTyped(uint32_t code)
 {
 	if (!active_target) {
-		std::cout << std::endl;
 		findNewTarget(code);
 	}
 
@@ -77,7 +76,7 @@ void Turret::update(float dt)
 	const float target_alignement = getTargetAlignement();
 	if (active_target) {
 		const float rotation_speed = 0.3f;
-		angle += target_alignement * rotation_speed;
+		angle += target_alignement * rotation_speed * getTimeRatio(dt);
 	}
 
 	if (waiting_shots.size()) {

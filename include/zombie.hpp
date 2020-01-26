@@ -18,6 +18,9 @@ struct Zombie : public PooledGameObject<Zombie>
 	void removeLetter();
 	bool isWordDone() const;
 
+	float getShotWidth() const;
+	float getRemainingWidth() const;
+
 	// GameObject overrides
 	void update(float dt) override;
 	void render() const override;
@@ -29,4 +32,6 @@ struct Zombie : public PooledGameObject<Zombie>
 	std::string word;
 	std::string shot_letters;
 	GameObject::ptr active_target;
+
+	const float character_size = 32.0f;
 };

@@ -17,7 +17,7 @@ bool Bullet::isDone() const
 
 void Bullet::update(float dt)
 {
-	position += direction * speed;
+	position += direction * speed * getTimeRatio(dt);
 	checkDead(this);
 }
 

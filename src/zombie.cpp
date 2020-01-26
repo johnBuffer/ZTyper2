@@ -34,16 +34,16 @@ void Zombie::shoot(const Vec2& recoil)
 	--life;
 	const char letter = shot_letters.front();
 	shot_letters = shot_letters.substr(1);
-	GameEngine::getInstance().world.addObject(Letter::create(position, letter));
+	const float word_width = getShotWidth() + getRemainingWidth();
+	const Vec2 letter_position(position.x - word_width * 0.5f, position.y + 30.0f);
+	GameEngine::getInstance().world.addObject(Letter::create(letter_position, letter));
 	position += recoil;
-
 }
 
 void Zombie::removeLetter()
 {
 	shot_letters += getLetter();
 	word = word.substr(1);
-	//std::cout << "Remove " << word << " " << life << std::endl;
 }
 
 bool Zombie::isWordDone() const
@@ -51,10 +51,22 @@ bool Zombie::isWordDone() const
 	return word.size() == 0U;
 }
 
+float Zombie::getShotWidth() const
+{
+	const sf::Font& font = GameEngine::getInstance().resources.getFont();
+	return getStringWidth(shot_letters, font, character_size);
+}
+
+float Zombie::getRemainingWidth() const
+{
+	const sf::Font& font = GameEngine::getInstance().resources.getFont();
+	return getStringWidth(word, font, character_size);
+}
+
 void Zombie::update(float dt)
 {
 	if (active_target) {
-		const float speed = 0.75f;
+		const float speed = 0.75f * getTimeRatio(dt);
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
 	}
@@ -64,7 +76,7 @@ void Zombie::update(float dt)
 
 void Zombie::render() const
 {
-	const size_t radius = 25U;
+	const float radius = 25.0f;
 	auto c = create_obj<sf::CircleShape>(radius, radius);
 	c->setOrigin(radius, radius);
 	c->setPosition(position.x, position.y);
@@ -75,22 +87,22 @@ void Zombie::render() const
 	auto text_remain = create_obj<sf::Text>();
 	text_shot->setFont(font);
 	text_shot->setFillColor(sf::Color(128, 128, 128));
-	text_shot->setCharacterSize(32);
+	text_shot->setCharacterSize(character_size);
 	text_shot->setString(shot_letters);
 	text_remain->setFont(font);
 	text_remain->setFillColor(sf::Color::White);
-	text_remain->setCharacterSize(32);
+	text_remain->setCharacterSize(character_size);
 	text_remain->setString(word);
 	auto bounds_shot = text_shot->getGlobalBounds();
 	auto bounds_remain = text_remain->getGlobalBounds();
 
 	const float text_height = std::max(bounds_remain.height, bounds_shot.height);
 
-	text_shot->setOrigin(0.0f, text_height + 2 * radius);
-	text_remain->setOrigin(0.0f, text_height + 2 * radius);
+	text_shot->setOrigin(0.0f,    - radius);
+	text_remain->setOrigin(0.0f,  - radius);
 
-	const float shot_width = getStringWidth(shot_letters, font, 32);
-	const float remain_width = getStringWidth(word, font, 32);
+	const float shot_width = getStringWidth(shot_letters, font, character_size);
+	const float remain_width = getStringWidth(word, font, character_size);
 	const float total_width = shot_width + remain_width;
 	const float x_offset = - total_width * 0.5f;
 

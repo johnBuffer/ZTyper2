@@ -14,11 +14,12 @@ Letter::Letter(const Vec2& position_, char c)
 void Letter::update(float dt)
 {
 	time += dt;
-	position += speed;
-	angle += angular_velocity;
+	const float time_factor = getTimeRatio(dt);
+	position += speed * time_factor;
+	angle += angular_velocity * time_factor;
 
-	speed += Vec2(0.0f, 1.5f);
-	angular_velocity *= 0.95f;
+	speed += Vec2(0.0f, 1.5f) * time_factor;
+	//angular_velocity *= 0.95f / time_factor;
 
 	checkDead(this);
 }

@@ -31,3 +31,5 @@ static std::shared_ptr<T> create_obj(Args&&... args)
 }
 
 float getStringWidth(const std::string str, const sf::Font& font, float char_size);
+
+float getTimeRatio(float dt);

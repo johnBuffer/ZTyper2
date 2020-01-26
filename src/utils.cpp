@@ -40,3 +40,8 @@ float getStringWidth(const std::string str, const sf::Font& font, float char_siz
 
 	return result;
 }
+
+float getTimeRatio(float dt)
+{
+	return dt/0.016f;
+}
