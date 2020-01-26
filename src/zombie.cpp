@@ -4,6 +4,8 @@
 #include <iostream>
 
 
+Animation Zombie::walk_animation;
+
 Zombie::Zombie()
 	: PooledGameObject()
 	, word("")
@@ -17,6 +19,7 @@ Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject::ptr 
 	, word(word_)
 	, active_target(target_)
 	, life(word_.size())
+	, walk_time(0.0f)
 {
 }
 
@@ -66,6 +69,8 @@ float Zombie::getRemainingWidth() const
 void Zombie::update(float dt)
 {
 	if (active_target) {
+		orientTowards(active_target, 0.05f * getTimeRatio(dt));
+		walk_time += getTimeRatio(dt);
 		const float speed = 0.75f * getTimeRatio(dt);
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
@@ -76,11 +81,14 @@ void Zombie::update(float dt)
 
 void Zombie::render() const
 {
-	const float radius = 25.0f;
-	auto c = create_obj<sf::CircleShape>(radius, radius);
-	c->setOrigin(radius, radius);
-	c->setPosition(position.x, position.y);
-	c->setFillColor(sf::Color::White);
+	const float radius = 50.0f;
+	const float animation_speed = 0.3f;
+	auto body = create_obj<sf::RectangleShape>(sf::Vector2f(288.0f, 311.0f));
+	body->setOrigin(100.0f, 170.0f);
+	body->setPosition(position.x, position.y);
+	body->setRotation(radToDeg(angle));
+	body->setScale(0.5f, 0.5f);
+	walk_animation.applyOn(body, animation_speed * walk_time);
 
 	const sf::Font& font = GameEngine::getInstance().resources.getFont();
 	auto text_shot = create_obj<sf::Text>();
@@ -109,7 +117,7 @@ void Zombie::render() const
 	text_shot->setPosition(position.x + x_offset, position.y);
 	text_remain->setPosition(position.x + x_offset + shot_width, position.y);
 
-	GameEngine::getInstance().renderer.addDrawable(c);
+	GameEngine::getInstance().renderer.addDrawable(body);
 	GameEngine::getInstance().renderer.addDrawable(text_shot);
 	GameEngine::getInstance().renderer.addDrawable(text_remain);
 }
@@ -121,4 +129,7 @@ bool Zombie::isDone() const
 
 void Zombie::init()
 {
+	resources.registerTexture("resources/textures/zombie_move.png");
+
+	walk_animation = Animation(resources.getTexture(0), 3, 6, 17);
 }

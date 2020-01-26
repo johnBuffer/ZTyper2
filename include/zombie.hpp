@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pooled_game_object.hpp"
-#include "pointer_builder.hpp"
+#include "animation.hpp"
 #include <string>
 #include <list>
 
@@ -28,10 +28,13 @@ struct Zombie : public PooledGameObject<Zombie>
 
 	static void init();
 
+	float walk_time;
 	uint64_t life;
 	std::string word;
 	std::string shot_letters;
 	GameObject::ptr active_target;
+
+	static Animation walk_animation;
 
 	const float character_size = 32.0f;
 };

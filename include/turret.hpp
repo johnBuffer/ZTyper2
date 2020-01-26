@@ -25,7 +25,6 @@ struct Turret : public PooledGameObject<Turret>
 	void render() const override;
 
 	float getDistanceWithTarget() const;
-	float getTargetAlignement() const;
 
 	static void init();
 

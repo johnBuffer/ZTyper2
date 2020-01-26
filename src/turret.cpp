@@ -75,10 +75,10 @@ void Turret::resetTarget()
 void Turret::update(float dt)
 {
 	shot_time += dt;
-	const float target_alignement = getTargetAlignement();
+	const float target_alignement = getTargetAlignement(active_target);
 	if (active_target) {
-		const float rotation_speed = 0.3f;
-		angle += target_alignement * rotation_speed * getTimeRatio(dt);
+		const float rotation_speed = 0.3f * getTimeRatio(dt);
+		orientTowards(active_target, rotation_speed);
 	}
 
 	if (waiting_shots.size()) {
@@ -151,20 +151,6 @@ float Turret::getDistanceWithTarget() const
 	return (position - active_target->position).getLength();
 }
 
-float Turret::getTargetAlignement() const
-{
-	if (!active_target) {
-		return 1.0f;
-	}
-
-	const Vec2& target_position = active_target->position;
-	const Vec2 to_target = (target_position - position).getNormalized();
-	const Vec2 turret_vec(cos(angle), sin(angle));
-	const Vec2 normal = turret_vec.getNormal();
-
-	return dot(to_target, normal);
-}
-
 void Turret::init()
 {
 	layer_id = GameEngine::getInstance().renderer.addLayer();
@@ -172,5 +158,5 @@ void Turret::init()
 	resources.registerTexture("resources/textures/base.png");
 	resources.registerTexture("resources/textures/explosion.png");
 
-	fire_animation = Animation(resources.getTexture(2), 1, 19, 19);
+	fire_animation = Animation(resources.getTexture(2), 1, 19, 19, false);
 }
