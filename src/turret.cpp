@@ -9,6 +9,8 @@ Turret::Turret(float x, float y, float angle)
 	: PooledGameObject(x, y, angle)
 	, active_target(nullptr)
 	, waiting_shots(0U)
+	, shot_time(0.0f)
+	, recoil(0.0f)
 {
 }
 
@@ -64,8 +66,14 @@ void Turret::findNewTarget(uint32_t code, GameWorld& world)
 	active_target = next_target;
 }
 
+void Turret::resetTarget()
+{
+	active_target = nullptr;
+}
+
 void Turret::update(float dt)
 {
+	shot_time += dt;
 	const float target_alignement = getTargetAlignement();
 	if (active_target) {
 		const float rotation_speed = 0.5f;
@@ -74,20 +82,30 @@ void Turret::update(float dt)
 
 	if (waiting_shots.size()) {
 		if (std::abs(target_alignement) < 0.1f || !active_target) {
-			GameEngine::getInstance()->world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(0.1f)));
+			shot_time = 0.0f;
+			recoil = 30.0f;
+			GameEngine::getInstance()->world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(0.05f)));
 			waiting_shots.pop_back();
 		}
 	}
+	
+	const float recover_speed = 70.0f;
+	const float recover_amount = dt * recover_speed;
+	recoil = recoil > recover_amount ? recoil - recover_amount : 0.0f;
 }
 
 void Turret::draw(sf::RenderTarget& target) const
 {
-	const float side_size(50.0f);
-	const float barrel_length(150.0F);
-	const float barrel_width(90.0f);
+	const float side_size(150.0f);
+	const float barrel_length(170.0F);
+	const float barrel_width(100.0f);
+
+	const float fire_length(100.0f);
+	const float fire_width(50.0f);
 	
 	// Base
 	sf::RectangleShape base(sf::Vector2f(side_size, side_size));
+	base.setTexture(&resources.getTexture(1));
 	base.setOrigin(side_size * 0.5f, side_size * 0.5f);
 	base.setFillColor(sf::Color::White);
 	base.setPosition(position.x, position.y);
@@ -95,9 +113,19 @@ void Turret::draw(sf::RenderTarget& target) const
 	// Barrel
 	sf::RectangleShape barrel(sf::Vector2f(barrel_length, barrel_width));
 	barrel.setTexture(&resources.getTexture(0));
-	barrel.setOrigin(barrel_length * 0.2f, barrel_width * 0.5f);
+	barrel.setOrigin(barrel_length * 0.4f + recoil, barrel_width * 0.5f);
 	barrel.setPosition(position.x, position.y);
 	barrel.setRotation(radToDeg(angle));
+
+	// Fire
+	const float animation_speed = 40.0f;
+	const uint32_t fire_rank = std::min(19.0f, shot_time * animation_speed);
+	sf::RectangleShape fire(sf::Vector2f(fire_length, fire_width));
+	fire.setTexture(&resources.getTexture(2));
+	fire.setTextureRect(sf::IntRect(0, fire_rank * 50, 128, 50));
+	fire.setOrigin(0.0f, fire_width * 0.5f);
+	fire.setPosition(position.x + barrel_length*0.4f*cos(angle), position.y + barrel_length * 0.4f * sin(angle));
+	fire.setRotation(radToDeg(angle));
 
 	// Laser
 	sf::VertexArray laser(sf::Lines, 2);
@@ -110,6 +138,7 @@ void Turret::draw(sf::RenderTarget& target) const
 	target.draw(base);
 	target.draw(laser);
 	target.draw(barrel);
+	target.draw(fire);
 }
 
 bool Turret::isDead() const
@@ -143,4 +172,6 @@ float Turret::getTargetAlignement() const
 void Turret::init()
 {
 	resources.registerTexture("resources/textures/turret.png");
+	resources.registerTexture("resources/textures/base.png");
+	resources.registerTexture("resources/textures/explosion.png");
 }

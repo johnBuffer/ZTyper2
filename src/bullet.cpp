@@ -17,10 +17,10 @@ bool Bullet::isDead() const
 
 void Bullet::update(float dt)
 {
-	const float speed = 40.0f;
+	const float speed = 60.0f;
 	position += direction * speed;
 	if (isDead()) {
-		active_target->shoot();
+		active_target->shoot(direction * (speed * 0.1f));
 		Bullet::remove(*this);
 	}
 }

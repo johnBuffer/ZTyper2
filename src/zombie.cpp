@@ -28,9 +28,11 @@ char Zombie::getNextLetter() const
 	return word[0];
 }
 
-void Zombie::shoot()
+void Zombie::shoot(const Vec2& recoil)
 {
 	--life;
+
+	position += recoil;
 }
 
 void Zombie::removeLetter()
@@ -51,7 +53,7 @@ bool Zombie::isDead() const
 void Zombie::update(float dt)
 {
 	if (active_target) {
-		const float speed = 0.5f;
+		const float speed = 0.75f;
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
 	}

@@ -14,7 +14,7 @@ struct Zombie : public PooledGameObject<Zombie>
 	Zombie(const Vec2& position_, const std::string& word_, const GameObject::ptr target_);
 
 	char getNextLetter() const;
-	void shoot();
+	void shoot(const Vec2& recoil);
 	void removeLetter();
 	bool isWordDone() const;
 

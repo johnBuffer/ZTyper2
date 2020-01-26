@@ -17,6 +17,7 @@ struct Turret : public PooledGameObject<Turret>
 	void charTyped(uint32_t code);
 	void shoot(uint32_t code, GameWorld& world);
 	void findNewTarget(uint32_t code, GameWorld& world);
+	void resetTarget();
 
 	// GameObjects overrides
 	void update(float dt) override;
@@ -30,4 +31,7 @@ struct Turret : public PooledGameObject<Turret>
 
 	Zombie::ptr active_target;
 	std::vector<Zombie::ptr> waiting_shots;
+
+	float shot_time;
+	float recoil;
 };
