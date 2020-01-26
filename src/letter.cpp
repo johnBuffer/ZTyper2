@@ -18,9 +18,7 @@ void Letter::update(float dt)
 	const float time_factor = getTimeRatio(dt);
 	position += speed * time_factor;
 	angle += angular_velocity * time_factor;
-
 	speed += Vec2(0.0f, 0.5f) * time_factor;
-	angular_velocity *= 0.95f / time_factor;
 
 	checkDead(this);
 }
