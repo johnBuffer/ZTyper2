@@ -1,4 +1,5 @@
 #include "..\include\zombie.hpp"
+#include <iostream>
 
 
 sf::Font Zombie::font;
@@ -19,9 +20,9 @@ Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject::ptr 
 {
 }
 
-char Zombie::getNextLetter() const
+char Zombie::getLetter() const
 {
-	if (isDead()) {
+	if (isWordDone()) {
 		return 0;
 	}
 
@@ -31,23 +32,18 @@ char Zombie::getNextLetter() const
 void Zombie::shoot(const Vec2& recoil)
 {
 	--life;
-
 	position += recoil;
 }
 
 void Zombie::removeLetter()
 {
 	word = word.substr(1);
+	std::cout << "Remove " << word << " " << life << std::endl;
 }
 
 bool Zombie::isWordDone() const
 {
-	return word.empty();
-}
-
-bool Zombie::isDead() const
-{
-	return !life;
+	return word.size() == 0U;
 }
 
 void Zombie::update(float dt)
@@ -58,8 +54,9 @@ void Zombie::update(float dt)
 		position += direction * speed;
 	}
 
-	if (isDead()) {
-		Zombie::remove(*this);
+	if (!life) {
+		std::cout << "DEAD" << std::endl;
+		setDead(this);
 	}
 }
 

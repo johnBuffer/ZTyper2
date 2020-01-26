@@ -15,14 +15,13 @@ struct Turret : public PooledGameObject<Turret>
 	// Turret specific
 	void aim_at(Zombie::ptr target);
 	void charTyped(uint32_t code);
-	void shoot(uint32_t code, GameWorld& world);
-	void findNewTarget(uint32_t code, GameWorld& world);
+	void shoot(uint32_t code);
+	void findNewTarget(uint32_t code);
 	void resetTarget();
 
 	// GameObjects overrides
 	void update(float dt) override;
 	void draw(sf::RenderTarget& target) const override;
-	bool isDead() const override;
 
 	float getDistanceWithTarget() const;
 	float getTargetAlignement() const;

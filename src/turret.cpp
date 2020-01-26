@@ -21,34 +21,38 @@ void Turret::aim_at(Zombie::ptr target)
 
 void Turret::charTyped(uint32_t code)
 {
-	GameWorld& world = GameEngine::getInstance()->world;
 	if (!active_target) {
-		findNewTarget(code, world);
+		std::cout << std::endl;
+		findNewTarget(code);
 	}
 
-	shoot(code, world);
+	shoot(code);
 }
 
-void Turret::shoot(uint32_t code, GameWorld& world)
+void Turret::shoot(uint32_t code)
 {
-	if (active_target) {
-		char next_letter = active_target->getNextLetter();
-		if (next_letter == code) {
+	if (active_target && code < 128) {
+		const char letter = active_target->getLetter();
+		if (letter == char(code)) {
+			std::cout << char(code) << " == (next) " << letter << std::endl;
 			active_target->removeLetter();
 			waiting_shots.push_back(active_target);
 			if (active_target->isWordDone()) {
 				active_target = nullptr;
 			}
 		}
+		else {
+			std::cout << char(code) << " != (next) " << letter << std::endl;
+		}
 	}
 }
 
-void Turret::findNewTarget(uint32_t code, GameWorld& world)
+void Turret::findNewTarget(uint32_t code)
 {
 	std::list<Zombie::ptr> potential_targets;
 
 	for (Zombie::ptr zombie : Zombie::pool) {
-		if (zombie->getNextLetter() == code) {
+		if (zombie->getLetter() == code) {
 			potential_targets.push_back(zombie);
 		}
 	}
@@ -76,7 +80,7 @@ void Turret::update(float dt)
 	shot_time += dt;
 	const float target_alignement = getTargetAlignement();
 	if (active_target) {
-		const float rotation_speed = 0.5f;
+		const float rotation_speed = 0.15f;
 		angle += target_alignement * rotation_speed;
 	}
 
@@ -84,7 +88,7 @@ void Turret::update(float dt)
 		if (std::abs(target_alignement) < 0.1f || !active_target) {
 			shot_time = 0.0f;
 			recoil = 30.0f;
-			GameEngine::getInstance()->world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(0.05f)));
+			GameEngine::getInstance().world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(0.05f)));
 			waiting_shots.pop_back();
 		}
 	}
@@ -99,51 +103,48 @@ void Turret::draw(sf::RenderTarget& target) const
 	const float side_size(150.0f);
 	const float barrel_length(170.0F);
 	const float barrel_width(100.0f);
-
 	const float fire_length(100.0f);
 	const float fire_width(50.0f);
 	
 	// Base
-	sf::RectangleShape base(sf::Vector2f(side_size, side_size));
-	base.setTexture(&resources.getTexture(1));
-	base.setOrigin(side_size * 0.5f, side_size * 0.5f);
-	base.setFillColor(sf::Color::White);
-	base.setPosition(position.x, position.y);
+	auto base = create_obj<sf::RectangleShape>(sf::Vector2f(side_size, side_size));
+	base->setTexture(&resources.getTexture(1));
+	base->setOrigin(side_size * 0.5f, side_size * 0.5f);
+	base->setFillColor(sf::Color::White);
+	base->setPosition(position.x, position.y);
 
 	// Barrel
-	sf::RectangleShape barrel(sf::Vector2f(barrel_length, barrel_width));
-	barrel.setTexture(&resources.getTexture(0));
-	barrel.setOrigin(barrel_length * 0.4f + recoil, barrel_width * 0.5f);
-	barrel.setPosition(position.x, position.y);
-	barrel.setRotation(radToDeg(angle));
+	auto barrel = create_obj<sf::RectangleShape>(sf::Vector2f(barrel_length, barrel_width));
+	barrel->setTexture(&resources.getTexture(0));
+	barrel->setOrigin(barrel_length * 0.2f + recoil, barrel_width * 0.5f);
+	barrel->setPosition(position.x, position.y);
+	barrel->setRotation(radToDeg(angle));
 
 	// Fire
 	const float animation_speed = 40.0f;
-	const uint32_t fire_rank = std::min(19.0f, shot_time * animation_speed);
-	sf::RectangleShape fire(sf::Vector2f(fire_length, fire_width));
-	fire.setTexture(&resources.getTexture(2));
-	fire.setTextureRect(sf::IntRect(0, fire_rank * 50, 128, 50));
-	fire.setOrigin(0.0f, fire_width * 0.5f);
-	fire.setPosition(position.x + barrel_length*0.4f*cos(angle), position.y + barrel_length * 0.4f * sin(angle));
-	fire.setRotation(radToDeg(angle));
+	const uint32_t fire_rank = static_cast<uint32_t>(std::min(19.0f, shot_time * animation_speed));
+	const float barrel_dist = barrel_length * 0.6f;
+	auto fire = create_obj<sf::RectangleShape>(sf::Vector2f(fire_length, fire_width));
+	fire->setTexture(&resources.getTexture(2));
+	fire->setTextureRect(sf::IntRect(0, fire_rank * 50, 128, 50));
+	fire->setOrigin(0.0f, fire_width * 0.5f);
+	fire->setPosition(position.x + barrel_dist * cos(angle), position.y + barrel_dist * sin(angle));
+	fire->setRotation(radToDeg(angle));
 
 	// Laser
-	sf::VertexArray laser(sf::Lines, 2);
-	laser[0].position = sf::Vector2f(position.x, position.y);
-	laser[0].color = sf::Color::Green;
+	auto laser = create_obj<sf::VertexArray>(sf::Lines, 2);
+	sf::VertexArray& lsr = *laser;
 	const float laser_length = getDistanceWithTarget();
-	laser[1].position = sf::Vector2f(position.x + laser_length*cos(angle), position.y + laser_length * sin(angle));
-	laser[1].color = sf::Color(0, 255, 0, 0);
+	lsr[0].position = sf::Vector2f(position.x, position.y);
+	lsr[0].color = sf::Color::Green;
+	lsr[1].position = sf::Vector2f(position.x + laser_length*cos(angle), position.y + laser_length * sin(angle));
+	lsr[1].color = sf::Color(0, 255, 0, 0);
 
-	target.draw(base);
-	target.draw(laser);
-	target.draw(barrel);
-	target.draw(fire);
-}
-
-bool Turret::isDead() const
-{
-	return false;
+	GameRenderer& renderer = GameEngine::getInstance().renderer;
+	renderer.addDrawable(base, layer_id);
+	renderer.addDrawable(laser, layer_id);
+	renderer.addDrawable(barrel, layer_id);
+	renderer.addDrawable(fire, layer_id);
 }
 
 float Turret::getDistanceWithTarget() const
@@ -171,6 +172,7 @@ float Turret::getTargetAlignement() const
 
 void Turret::init()
 {
+	layer_id = GameEngine::getInstance().renderer.addLayer();
 	resources.registerTexture("resources/textures/turret.png");
 	resources.registerTexture("resources/textures/base.png");
 	resources.registerTexture("resources/textures/explosion.png");

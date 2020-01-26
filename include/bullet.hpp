@@ -10,7 +10,7 @@ struct Bullet : public PooledGameObject<Bullet>
 	Bullet() = default;
 	Bullet(const Vec2& position_, Zombie::ptr target, float angle_);
 
-	bool isDead() const override;
+	bool isDone() const;
 	void update(float dt) override;
 	void draw(sf::RenderTarget& target) const;
 

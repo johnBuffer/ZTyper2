@@ -30,16 +30,22 @@ void GameEngine::execute_modules(float dt)
 
 void GameEngine::render_in(sf::RenderTarget& target) const
 {
-	for (GameObject::ptr object : world.objects) {
-		object->draw(target);
+	for (const GameObject::ptr obj : world.objects) {
+		obj->draw(target);
 	}
+	renderer.render(target);
 }
 
-GameEngine* GameEngine::getInstance()
+void GameEngine::clear()
+{
+	renderer.clear();
+}
+
+GameEngine& GameEngine::getInstance()
 {
 	if (!global_instance) {
 		global_instance = new GameEngine();
 	}
 	
-	return global_instance;
+	return *global_instance;
 }

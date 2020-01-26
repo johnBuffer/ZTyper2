@@ -13,11 +13,13 @@ struct GameObject
 	GameObject()
 		: position(0.0f, 0.0f)
 		, angle(0.0f)
+		, dead(false)
 	{}
 
 	GameObject(const Vec2& position_, float angle_)
 		: position(position_)
 		, angle(angle_)
+		, dead(false)
 	{}
 
 	GameObject(float x, float y, float angle_)
@@ -26,8 +28,9 @@ struct GameObject
 
 	virtual void update(float dt) {}
 	virtual void draw(sf::RenderTarget& target) const {}
-	virtual bool isDead() const { return true; }
+	bool isDead() const { return dead; }
 
 	Vec2 position;
 	float angle;
+	bool dead;
 };

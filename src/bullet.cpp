@@ -9,7 +9,7 @@ Bullet::Bullet(const Vec2& position_, Zombie::ptr target, float angle_)
 {
 }
 
-bool Bullet::isDead() const
+bool Bullet::isDone() const
 {
 	const Vec2& to_target = active_target->position - position;
 	return (dot(direction, to_target) < 0.0f);
@@ -19,7 +19,8 @@ void Bullet::update(float dt)
 {
 	const float speed = 60.0f;
 	position += direction * speed;
-	if (isDead()) {
+	if (isDone()) {
+		dead = true;
 		active_target->shoot(direction * (speed * 0.1f));
 		Bullet::remove(*this);
 	}
@@ -28,7 +29,7 @@ void Bullet::update(float dt)
 void Bullet::draw(sf::RenderTarget& target) const
 {
 	const float width = 200.0f;
-	const float height = 40.0f;
+	const float height = 30.0f;
 	sf::RectangleShape shape(sf::Vector2f(width, height));
 	shape.setTexture(&resources.getTexture(0));
 	shape.setOrigin(width, height * 0.5f);
