@@ -10,7 +10,9 @@
 
 struct GameEngine
 {
-	void initialize();
+	static void initialize(uint32_t win_width, uint32_t win_height);
+
+	GameEngine(uint32_t win_width, uint32_t win_height);
 
 	void update(float dt);
 

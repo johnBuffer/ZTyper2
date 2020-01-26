@@ -16,6 +16,6 @@ struct Animation
 	uint32_t count;
 	const sf::Texture* texture;
 	sf::Vector2u texture_size;
-	sf::Vector2f tile_size;
+	sf::Vector2u tile_size;
 	bool loop;
 };

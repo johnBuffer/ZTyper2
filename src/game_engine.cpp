@@ -4,9 +4,15 @@
 GameEngine* GameEngine::global_instance = nullptr;
 
 
-void GameEngine::initialize()
+void GameEngine::initialize(uint32_t win_width, uint32_t win_height)
 {
-	resources.registerFont("font_med.ttf");
+	global_instance = new GameEngine(win_width, win_height);
+	global_instance->resources.registerFont("font_med.ttf");
+}
+
+GameEngine::GameEngine(uint32_t win_width, uint32_t win_height)
+	: renderer(win_width, win_height)
+{
 }
 
 void GameEngine::update(float dt)
@@ -36,12 +42,7 @@ void GameEngine::clear()
 }
 
 GameEngine& GameEngine::getInstance()
-{
-	if (!global_instance) {
-		global_instance = new GameEngine();
-		global_instance->initialize();
-	}
-	
+{	
 	return *global_instance;
 }
 

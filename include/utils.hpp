@@ -30,6 +30,6 @@ static std::shared_ptr<T> create_obj(Args&&... args)
 	return std::make_shared<T>(args...);
 }
 
-float getStringWidth(const std::string str, const sf::Font& font, float char_size);
+float getStringWidth(const std::string str, const sf::Font& font, uint32_t char_size);
 
 float getTimeRatio(float dt);

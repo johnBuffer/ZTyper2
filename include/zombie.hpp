@@ -25,6 +25,7 @@ struct Zombie : public PooledGameObject<Zombie>
 	void update(float dt) override;
 	void render() const override;
 	bool isDone() const override;
+	void onDone() override;
 
 	static void init();
 
@@ -36,5 +37,5 @@ struct Zombie : public PooledGameObject<Zombie>
 
 	static Animation walk_animation;
 
-	const float character_size = 32.0f;
+	const uint32_t character_size = 32U;
 };

@@ -32,7 +32,8 @@ bool Letter::isDone() const
 void Letter::render() const
 {
 	const float time_ratio = 1.0f - time / max_time;
-	sf::Color color(255*time_ratio, 255 * time_ratio, 255 * time_ratio);
+	const uint8_t c_intensity = static_cast<uint8_t>(255 * time_ratio);
+	sf::Color color(c_intensity);
 
 	auto text = create_obj<sf::Text>();
 	text->setFont(GameEngine::getInstance().resources.getFont());

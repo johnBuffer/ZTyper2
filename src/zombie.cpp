@@ -127,6 +127,11 @@ bool Zombie::isDone() const
 	return !life;
 }
 
+void Zombie::onDone()
+{
+	
+}
+
 void Zombie::init()
 {
 	resources.registerTexture("resources/textures/zombie_move.png");

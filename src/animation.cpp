@@ -15,7 +15,7 @@ Animation::Animation(const sf::Texture& texture_, uint32_t width_, uint32_t heig
 	, texture_size(texture_.getSize())
 	, loop(loop_)
 {
-	tile_size = sf::Vector2f(texture_size.x / width, texture_size.y / height);
+	tile_size = sf::Vector2u(texture_size.x / width, texture_size.y / height);
 }
 
 void Animation::applyOn(sf::RectangleShape& shape, float time) const

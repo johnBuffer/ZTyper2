@@ -19,6 +19,7 @@ int32_t main()
     window.setFramerateLimit(60);
 
     // Various initializations
+    GameEngine::initialize(win_width, win_height);
     Zombie::initialize();
     Bullet::initialize();
     Turret::initialize();

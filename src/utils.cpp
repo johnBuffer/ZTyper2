@@ -31,7 +31,7 @@ float getRandUnder(float max)
 	return val;
 }
 
-float getStringWidth(const std::string str, const sf::Font& font, float char_size)
+float getStringWidth(const std::string str, const sf::Font& font, uint32_t char_size)
 {
 	float result = 0.0f;
 	for (char c : str) {
