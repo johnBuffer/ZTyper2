@@ -1,4 +1,5 @@
-#include "..\include\bullet.hpp"
+#include "bullet.hpp"
+#include "explosion.hpp"
 #include "utils.hpp"
 
 
@@ -36,8 +37,9 @@ void Bullet::render() const
 
 void Bullet::onDone()
 {
-	const float restitution = 0.1f;
+	const float restitution = 0.2f;
 	active_target->shoot(direction * (speed * restitution));
+	GameEngine::getInstance().world.addObject(Explosion::create(position, 10, 20.0f, 0.25f));
 }
 
 void Bullet::init()

@@ -3,6 +3,7 @@
 #include "zombie.hpp"
 #include "game_engine.hpp"
 #include "bullet.hpp"
+#include "explosion.hpp"
 #include "letter.hpp"
 #include "utils.hpp"
 #include <event_manager.hpp>
@@ -23,6 +24,7 @@ int32_t main()
     Zombie::initialize();
     Bullet::initialize();
     Turret::initialize();
+    Explosion::initialize();
 
     Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, -3.1415926f * 0.5f);
 

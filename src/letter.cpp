@@ -7,7 +7,7 @@ Letter::Letter(const Vec2& position_, char c)
 	: PooledGameObject(position_, 0.0f)
 	, glyph(c)
 	, time(0.0f)
-	, speed(getRandRange(10.0f), -7.0f + getRandRange(2.0f))
+	, speed(getRandRange(10.0f), -10.0f + getRandRange(2.0f))
 	, angular_velocity(getRandRange(20.0f))
 {
 }
@@ -18,7 +18,7 @@ void Letter::update(float dt)
 	const float time_factor = getTimeRatio(dt);
 	position += speed * time_factor;
 	angle += angular_velocity * time_factor;
-	speed += Vec2(0.0f, 0.5f) * time_factor;
+	speed += Vec2(0.0f, 0.75f) * time_factor;
 
 	checkDead(this);
 }
