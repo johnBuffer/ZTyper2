@@ -6,6 +6,7 @@
 #include "explosion.hpp"
 #include "letter.hpp"
 #include "utils.hpp"
+#include "zombie_physics.hpp"
 #include <event_manager.hpp>
 
 #include <iostream>
@@ -41,6 +42,8 @@ int32_t main()
     engine.world.addObject(zombie_1);
     engine.world.addObject(zombie_2);
     engine.world.addObject(zombie_3);
+
+    engine.modules.push_back(create_obj<ZombiePhysics>());
 
     // Register events callbacks
     sfev::EventManager event_manager(window);

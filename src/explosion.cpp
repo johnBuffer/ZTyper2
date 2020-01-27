@@ -5,9 +5,10 @@
 #include <iostream>
 
 
-Explosion::Explosion(const Vec2& position_, uint32_t n, float size, float life_time_)
+Explosion::Explosion(const Vec2& position_, uint32_t n, float size, float life_time_, bool ground_trace_)
 	: life_time(life_time_)
 	, time(0.0f)
+	, ground_trace(ground_trace_)
 {
 	for (uint32_t i(n); i--;) {
 		particules.emplace_back();
@@ -18,7 +19,8 @@ Explosion::Explosion(const Vec2& position_, uint32_t n, float size, float life_t
 		const float speed_direction = getRandUnder(2 * PI);
 		const float speed = getRandUnder(10.0f);
 		particule.speed = Vec2(speed * cos(speed_direction), speed * sin(speed_direction));
-		particule.size = size;
+		particule.size = size * 0.5f + getRandUnder(size * 0.5f);
+		particule.color_intensity = getRandUnder(255.0f);
 	}
 }
 
@@ -42,12 +44,12 @@ void Explosion::render() const
 		addParticuleToVA(tva->va, i);
 	}
 
-	GameEngine::getInstance().renderer.addDrawable(tva, layer_id);
+	GameEngine::getInstance().renderer.addDrawable(tva, ground_trace ? GameRenderer::Ground : layer_id);
 }
 
 bool Explosion::isDone() const
 {
-	return time + 0.05f > life_time;
+	return time + 0.08f > life_time;
 }
 
 void Explosion::onDone()
@@ -73,11 +75,14 @@ void Explosion::init()
 void Explosion::addParticuleToVA(sf::VertexArray& va, uint64_t i) const
 {
 	const Particule& particule = particules[i];
-	const float cosa = cos(particule.angle);
-	const float sina = sin(particule.angle);
+	const float p_angle = ground_trace ? getRandUnder(2.0f * PI) : particule.angle;
+	const float cosa = cos(p_angle);
+	const float sina = sin(p_angle);
 	const float x = particule.position.x;
 	const float y = particule.position.y;
 	const float size = particule.size * (1.0f - time / life_time);
+	const uint8_t color_component = static_cast<uint8_t>(particule.color_intensity);
+	const sf::Color color = sf::Color(color_component, color_component, color_component);
 
 	va[4 * i + 0].position = sf::Vector2f(x + size * cosa, y + size * sina);
 	va[4 * i + 1].position = sf::Vector2f(x - size * sina, y + size * cosa);
@@ -88,6 +93,11 @@ void Explosion::addParticuleToVA(sf::VertexArray& va, uint64_t i) const
 	va[4 * i + 1].texCoords = sf::Vector2f(70.0f, 0.0f);
 	va[4 * i + 2].texCoords = sf::Vector2f(70.0f, 76.0f);
 	va[4 * i + 3].texCoords = sf::Vector2f(0.0f, 76.0f);
+
+	va[4 * i + 0].color = color;
+	va[4 * i + 1].color = color;
+	va[4 * i + 2].color = color;
+	va[4 * i + 3].color = color;
 
 }
 

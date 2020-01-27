@@ -39,7 +39,7 @@ void Bullet::onDone()
 {
 	const float restitution = 0.2f;
 	active_target->shoot(direction * (speed * restitution));
-	GameEngine::getInstance().world.addObject(Explosion::create(position, 10, 20.0f, 0.25f));
+	GameEngine::getInstance().world.addObject(Explosion::create(position, 20, 80.0f, 0.25f));
 }
 
 void Bullet::init()

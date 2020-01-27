@@ -15,7 +15,7 @@ struct Letter : PooledGameObject<Letter>
 
 	char glyph;
 	float time;
-	const float max_time = 0.5f;
+	const float max_time = 0.75f;
 	Vec2 speed;
 	float angular_velocity;
 };

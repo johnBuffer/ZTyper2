@@ -10,6 +10,7 @@ struct Particule
 	Vec2 speed;
 	float size;
 	float angle;
+	float color_intensity;
 
 	void update(float dt);
 };
@@ -18,7 +19,7 @@ struct Particule
 struct Explosion : public PooledGameObject<Explosion>
 {
 	Explosion() = default;
-	Explosion(const Vec2& position_, uint32_t n, float size, float life_time_);
+	Explosion(const Vec2& position_, uint32_t n, float size, float life_time_, bool ground_trace_ = false);
 
 	void update(float dt) override;
 	void render() const override;
@@ -32,6 +33,7 @@ private:
 
 	float time;
 	float life_time;
+	bool ground_trace;
 
 	std::vector<Particule> particules;
 };

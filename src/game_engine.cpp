@@ -18,6 +18,7 @@ GameEngine::GameEngine(uint32_t win_width, uint32_t win_height)
 void GameEngine::update(float dt)
 {
 	updateObjects(dt);
+	execute_modules(dt);
 	world.addWaitingObjects();
 }
 

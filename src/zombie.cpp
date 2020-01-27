@@ -1,6 +1,7 @@
 #include "..\include\zombie.hpp"
 #include "utils.hpp"
 #include "letter.hpp"
+#include "explosion.hpp"
 #include <iostream>
 
 
@@ -129,7 +130,7 @@ bool Zombie::isDone() const
 
 void Zombie::onDone()
 {
-	
+	GameEngine::getInstance().world.addObject(Explosion::create(position, 20, 80.0f, 0.25f, true));
 }
 
 void Zombie::init()
