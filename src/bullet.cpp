@@ -33,6 +33,7 @@ void Bullet::render() const
 	shape->setPosition(position.x, position.y);
 
 	GameEngine::getInstance().renderer.addDrawable(shape);
+	GameEngine::getInstance().renderer.addDrawable(shape, GameRenderer::Bloom);
 }
 
 void Bullet::onDone()

@@ -7,7 +7,8 @@ GameEngine* GameEngine::global_instance = nullptr;
 void GameEngine::initialize(uint32_t win_width, uint32_t win_height)
 {
 	global_instance = new GameEngine(win_width, win_height);
-	global_instance->resources.registerFont("font_med.ttf");
+	global_instance->resources.registerFont("resources/fonts/font.ttf");
+	//global_instance->resources.registerFont("font_med.ttf");
 }
 
 GameEngine::GameEngine(uint32_t win_width, uint32_t win_height)

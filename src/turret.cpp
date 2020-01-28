@@ -140,6 +140,8 @@ void Turret::render() const
 	renderer.addDrawable(laser, layer_id);
 	renderer.addDrawable(barrel, layer_id);
 	renderer.addDrawable(fire, layer_id);
+	renderer.addDrawable(laser, GameRenderer::Bloom);
+	renderer.addDrawable(fire, GameRenderer::Bloom);
 }
 
 float Turret::getDistanceWithTarget() const

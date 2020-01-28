@@ -2,6 +2,8 @@
 
 
 GameRenderer::GameRenderer(uint32_t win_width, uint32_t win_height)
+	: blur(win_width, win_height, 0.5f)
+	, ground_texture(nullptr)
 {
 	// Adding default layer
 	addLayer();
@@ -11,16 +13,20 @@ GameRenderer::GameRenderer(uint32_t win_width, uint32_t win_height)
 	addLayer();
 	// Initialize ground texture
 	ground.create(win_width, win_height);
-	ground.clear(sf::Color::Black);
+	ground.clear(sf::Color(0, 0, 0, 0));
 	// Initialize bloom texture
 	bloom.create(win_width, win_height);
-	bloom.clear(sf::Color::Black);
 }
 
 uint64_t GameRenderer::addLayer()
 {
 	layers.emplace_back();
 	return layers.size() - 1;
+}
+
+void GameRenderer::setGroundTexture(const sf::Texture& texture)
+{
+	ground_texture = &texture;
 }
 
 void GameRenderer::addDrawable(RenderLayer::DrawablePtr drawable, uint64_t layer_id)
@@ -37,6 +43,8 @@ void GameRenderer::render(sf::RenderTarget& target) const
 		const RenderLayer& layer = layers[i];
 		layer.render(target);
 	}
+	// Render bloom
+	renderBloom(target);
 }
 
 void GameRenderer::clear()
@@ -48,9 +56,20 @@ void GameRenderer::clear()
 
 void GameRenderer::renderGround(sf::RenderTarget& target) const
 {
+	if (ground_texture) {
+		target.draw(sf::Sprite(*ground_texture));
+	}
 	layers[RenderTarget::Ground].render(ground);
 	ground.display();
 	target.draw(sf::Sprite(ground.getTexture()));
+}
+
+void GameRenderer::renderBloom(sf::RenderTarget& target) const
+{
+	bloom.clear();
+	layers[RenderTarget::Bloom].render(bloom);
+	bloom.display();
+	target.draw(blur.apply(bloom.getTexture(), 1U), sf::BlendAdd);
 }
 
 void RenderLayer::render(sf::RenderTarget& target) const

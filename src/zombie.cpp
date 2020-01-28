@@ -91,11 +91,17 @@ void Zombie::render() const
 	body->setScale(0.5f, 0.5f);
 	walk_animation.applyOn(body, animation_speed * walk_time);
 
+	const float shadow_size = 200.0f;
+	auto shadow = create_obj<sf::RectangleShape>(sf::Vector2f(shadow_size, shadow_size));
+	shadow->setOrigin(75.0f, 75.0f);
+	shadow->setPosition(position.x, position.y);
+	shadow->setTexture(&resources.getTexture(1U));
+
 	const sf::Font& font = GameEngine::getInstance().resources.getFont();
 	auto text_shot = create_obj<sf::Text>();
 	auto text_remain = create_obj<sf::Text>();
 	text_shot->setFont(font);
-	text_shot->setFillColor(sf::Color(128, 128, 128));
+	text_shot->setFillColor(sf::Color::White);
 	text_shot->setCharacterSize(character_size);
 	text_shot->setString(shot_letters);
 	text_remain->setFont(font);
@@ -118,9 +124,11 @@ void Zombie::render() const
 	text_shot->setPosition(position.x + x_offset, position.y);
 	text_remain->setPosition(position.x + x_offset + shot_width, position.y);
 
+	GameEngine::getInstance().renderer.addDrawable(shadow);
 	GameEngine::getInstance().renderer.addDrawable(body);
 	GameEngine::getInstance().renderer.addDrawable(text_shot);
 	GameEngine::getInstance().renderer.addDrawable(text_remain);
+	GameEngine::getInstance().renderer.addDrawable(text_remain, GameRenderer::Bloom);
 }
 
 bool Zombie::isDone() const
@@ -136,6 +144,7 @@ void Zombie::onDone()
 void Zombie::init()
 {
 	resources.registerTexture("resources/textures/zombie_move.png");
+	resources.registerTexture("resources/textures/shadow.png");
 
 	walk_animation = Animation(resources.getTexture(0), 3, 6, 17);
 }

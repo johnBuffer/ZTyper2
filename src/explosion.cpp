@@ -20,7 +20,7 @@ Explosion::Explosion(const Vec2& position_, uint32_t n, float size, float life_t
 		const float speed = getRandUnder(10.0f);
 		particule.speed = Vec2(speed * cos(speed_direction), speed * sin(speed_direction));
 		particule.size = size * 0.5f + getRandUnder(size * 0.5f);
-		particule.color_intensity = getRandUnder(255.0f);
+		particule.color_intensity = getRandUnder(128.0f);
 	}
 }
 
@@ -82,7 +82,8 @@ void Explosion::addParticuleToVA(sf::VertexArray& va, uint64_t i) const
 	const float y = particule.position.y;
 	const float size = particule.size * (1.0f - time / life_time);
 	const uint8_t color_component = static_cast<uint8_t>(particule.color_intensity);
-	const sf::Color color = sf::Color(color_component, color_component, color_component);
+	const uint8_t alpha = ground_trace ? 128U : 255U;
+	const sf::Color color = sf::Color(color_component, color_component, color_component, alpha);
 
 	va[4 * i + 0].position = sf::Vector2f(x + size * cosa, y + size * sina);
 	va[4 * i + 1].position = sf::Vector2f(x - size * sina, y + size * cosa);
