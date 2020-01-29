@@ -138,7 +138,9 @@ bool Zombie::isDone() const
 
 void Zombie::onDone()
 {
-	GameEngine::getInstance().world.addObject(Explosion::create(position, 20, 80.0f, 0.25f, true));
+	GameEngine::getInstance().world.addObject(Explosion::create(position, 10, 40.0f, 0.5f, true));
+	GameEngine::getInstance().world.addObject(Explosion::create(position, 40, 80.0f, 0.5f));
+	GameEngine::getInstance().world.addObject(Explosion::create(position, 40, 160.0f, 0.25f));
 }
 
 void Zombie::init()

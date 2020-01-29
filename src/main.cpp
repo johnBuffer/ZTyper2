@@ -57,7 +57,7 @@ int32_t main()
 
         event_manager.processEvents();
 
-        if (engine.getTime() - last_zombie > 0.5f) {
+        if (engine.getTime() - last_zombie > 1.5f) {
             last_zombie = engine.getTime();
             const float x_z = static_cast<const float>(rand() % win_width);
             const float y_z = static_cast<const float>(-150 - rand() % 1000);

@@ -59,6 +59,11 @@ void GameRenderer::renderGround(sf::RenderTarget& target) const
 	if (ground_texture) {
 		target.draw(sf::Sprite(*ground_texture));
 	}
+	const sf::Vector2u screen_size = ground.getSize();
+	sf::RectangleShape cache(sf::Vector2f(screen_size.x, screen_size.y));
+	const uint8_t intensity = 250U;
+	cache.setFillColor(sf::Color(intensity, intensity, intensity));
+	ground.draw(cache, sf::BlendMultiply);
 	layers[RenderTarget::Ground].render(ground);
 	ground.display();
 	target.draw(sf::Sprite(ground.getTexture()));

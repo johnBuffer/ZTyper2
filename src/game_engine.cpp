@@ -27,6 +27,7 @@ GameEngine::GameEngine(uint32_t win_width, uint32_t win_height)
 
 void GameEngine::update(float dt)
 {
+	renderer.clear();
 	updateObjects(dt);
 	execute_modules(dt);
 	world.addWaitingObjects();
@@ -41,7 +42,6 @@ void GameEngine::execute_modules(float dt)
 
 void GameEngine::render_in(sf::RenderTarget& target) const
 {
-	renderer.clear();
 	for (const GameObject::ptr obj : world.objects) {
 		obj->render();
 	}

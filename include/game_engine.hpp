@@ -24,7 +24,7 @@ struct GameEngine
 	float getTime() const;
 
 	GameWorld world;
-	mutable GameRenderer renderer;
+	GameRenderer renderer;
 	ResourcesManager resources;
 	std::list<Module::ptr> modules;
 

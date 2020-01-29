@@ -20,7 +20,7 @@ Explosion::Explosion(const Vec2& position_, uint32_t n, float size, float life_t
 		const float speed = getRandUnder(10.0f);
 		particule.speed = Vec2(speed * cos(speed_direction), speed * sin(speed_direction));
 		particule.size = size * 0.5f + getRandUnder(size * 0.5f);
-		particule.color_intensity = getRandUnder(128.0f);
+		particule.color_intensity = getRandUnder(200.0f);
 	}
 }
 
@@ -49,7 +49,7 @@ void Explosion::render() const
 
 bool Explosion::isDone() const
 {
-	return time + 0.08f > life_time;
+	return time + 0.1f > life_time;
 }
 
 void Explosion::onDone()
@@ -99,7 +99,6 @@ void Explosion::addParticuleToVA(sf::VertexArray& va, uint64_t i) const
 	va[4 * i + 1].color = color;
 	va[4 * i + 2].color = color;
 	va[4 * i + 3].color = color;
-
 }
 
 void Particule::update(float dt)
