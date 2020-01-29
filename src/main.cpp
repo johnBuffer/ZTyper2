@@ -30,7 +30,7 @@ int32_t main()
     Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, -3.1415926f * 0.5f);
 
     Zombie::ptr zombie_1 = Zombie::create(Vec2(0.0f, 0.0f), "alol", turret);
-    Zombie::ptr zombie_2 = Zombie::create(Vec2(800.0f, 0.0f), "blol", turret);
+    Zombie::ptr zombie_2 = Zombie::create(Vec2(800.0f, 500.0f), "blol", turret);
     Zombie::ptr zombie_3 = Zombie::create(Vec2(400.0f, -50.0f), "clol", turret);
 
     const std::vector<std::string> words = { "the", "be", "of", "and", "a", "to", "in", "he", "have", "it", "that", "for", "they", "I", "with", "as", "not", "on", "she", "at", "by", "this", "we", "you", "do", "but", "from", "or", "which", "one", "would", "all", "will", "there", "say", "who", "make", "when", "can", "more", "if", "no", "man", "out", "other", "so", "what", "time", "up", "go", "about", "than", "into", "could", "state", "only", "new", "year", "some", "take", "come", "these", "know", "see", "use", "get", "like", "then", "first", "any", "work", "now", "may", "such", "give", "over", "think", "most", "even", "find", "day", "also", "after", "way", "many", "must", "look", "before", "great", "back", "through", "long", "where", "much", "should", "well", "people", "down", "own", "just", "because", "good", "each", "those", "feel", "seem", "how", "high", "too", "place", "little", "world", "very", "still", "nation", "hand", "old", "life", "tell", "write", "become", "here", "show", "house", "both", "between", "need", "mean", "call", "develop", "under", "last", "right", "move", "thing", "general", "school", "never", "same", "another", "begin", "while", "number", "part", "turn", "real", "leave", "might", "want", "point", "form", "off", "child", "few", "small", "since", "against", "ask", "late", "home", "interest", "large", "person", "end", "open", "public", "follow", "during", "present", "without", "again", "hold", "govern", "around", "possible", "head", "consider", "word", "program", "problem", "however", "lead", "system", "set", "order", "eye", "plan", "run", "keep", "face", "fact", "group", "play", "stand", "increase", "early", "course", "change", "help", "line" };
@@ -52,12 +52,12 @@ int32_t main()
     event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret->charTyped(ev.text.unicode); });
 
     float last_zombie = engine.getTime();
-    while (window.isOpen()) {
+    while (!turret->isDead()) {
         const sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
 
         event_manager.processEvents();
 
-        if (engine.getTime() - last_zombie > 1.5f) {
+        if (engine.getTime() - last_zombie > 0.5f) {
             last_zombie = engine.getTime();
             const float x_z = static_cast<const float>(rand() % win_width);
             const float y_z = static_cast<const float>(-150 - rand() % 1000);
@@ -74,6 +74,8 @@ int32_t main()
 
         window.display();
     }
+
+    GameEngine::exit();
 
     return 0;
 }

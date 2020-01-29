@@ -11,6 +11,14 @@ void GameEngine::initialize(uint32_t win_width, uint32_t win_height)
 	//global_instance->resources.registerFont("font_med.ttf");
 }
 
+void GameEngine::exit()
+{
+	if (global_instance) {
+		global_instance->clean();
+		delete global_instance;
+	}
+}
+
 GameEngine::GameEngine(uint32_t win_width, uint32_t win_height)
 	: renderer(win_width, win_height)
 	, global_time(0.0f)
@@ -38,6 +46,14 @@ void GameEngine::render_in(sf::RenderTarget& target) const
 		obj->render();
 	}
 	renderer.render(target);
+}
+
+void GameEngine::clean()
+{
+	resources.clear();
+	for (auto clean_fun : clean_functions) {
+		clean_fun();
+	}
 }
 
 GameEngine& GameEngine::getInstance()

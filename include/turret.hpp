@@ -23,16 +23,21 @@ struct Turret : public PooledGameObject<Turret>
 	// GameObjects overrides
 	void update(float dt) override;
 	void render() const override;
+	bool isDone() const override;
 
 	float getDistanceWithTarget() const;
 
 	static void init();
 
+private:
 	Zombie::ptr active_target;
 	std::vector<Zombie::ptr> waiting_shots;
 
 	static Animation fire_animation;
 
+	int32_t life;
 	float shot_time;
 	float recoil;
+
+	void checkZombiesCollisions();
 };

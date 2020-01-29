@@ -13,6 +13,7 @@ Turret::Turret(float x, float y, float angle)
 	, waiting_shots(0U)
 	, shot_time(0.0f)
 	, recoil(0.0f)
+	, life(1)
 {
 }
 
@@ -89,10 +90,14 @@ void Turret::update(float dt)
 			waiting_shots.pop_back();
 		}
 	}
+
+	checkZombiesCollisions();
 	
 	const float recover_speed = 70.0f;
 	const float recover_amount = dt * recover_speed;
 	recoil = recoil > recover_amount ? recoil - recover_amount : 0.0f;
+
+	checkDead(this);
 }
 
 void Turret::render() const
@@ -144,6 +149,11 @@ void Turret::render() const
 	renderer.addDrawable(fire, GameRenderer::Bloom);
 }
 
+bool Turret::isDone() const
+{
+	return life < 1;
+}
+
 float Turret::getDistanceWithTarget() const
 {
 	if (!active_target) {
@@ -161,4 +171,22 @@ void Turret::init()
 	resources.registerTexture("resources/textures/explosion.png");
 
 	fire_animation = Animation(resources.getTexture(2), 1, 19, 19, false);
+}
+
+void Turret::checkZombiesCollisions()
+{
+	const float z_radius = 80.0f;
+	const float turret_radius = 80.0f;
+	const float min_dist = 2.0f * z_radius;
+	uint64_t z_count = Zombie::pool.size();
+	for (uint64_t i(0U); i < z_count; ++i) {
+		Zombie::ptr z1 = Zombie::pool[i];
+		const Vec2 z_to_turret = position - z1->position;
+		const float distance = z_to_turret.getLength();
+		if (distance < min_dist) {
+			z1->setDead(&(*z1));
+			--life;
+			std::cout << life << std::endl;
+		}
+	}
 }

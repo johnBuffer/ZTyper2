@@ -1,5 +1,10 @@
-#include "..\include\resources_manager.hpp"
+#include "resources_manager.hpp"
 
+
+ResourcesManager::~ResourcesManager()
+{
+	clear();
+}
 
 ResourcesManager::ID ResourcesManager::registerTexture(const std::string& filename)
 {
@@ -15,6 +20,12 @@ ResourcesManager::ID ResourcesManager::registerFont(const std::string& filename)
 	fonts.back().loadFromFile(filename);
 
 	return fonts.size() - 1;
+}
+
+void ResourcesManager::clear()
+{
+	textures.clear();
+	fonts.clear();
 }
 
 const sf::Texture& ResourcesManager::getTexture(ID texture_id) const

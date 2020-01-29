@@ -72,7 +72,7 @@ void Zombie::update(float dt)
 	if (active_target) {
 		orientTowards(active_target, 0.05f * getTimeRatio(dt));
 		walk_time += getTimeRatio(dt);
-		const float speed = 0.75f * getTimeRatio(dt);
+		const float speed = 1.0f * getTimeRatio(dt);
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
 	}
