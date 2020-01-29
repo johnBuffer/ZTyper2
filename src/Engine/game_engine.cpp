@@ -80,9 +80,19 @@ void GameEngine::updateObjects(float forced_dt)
 
 void GameEngine::cleanDeadObjects()
 {
-	for (auto it = world.objects.begin(); it != world.objects.end(); ++it) {
-		if ((*it)->isDead()) {
-			world.objects.erase(it--);
+	uint64_t objects_count = world.objects.size();
+	uint64_t deleted_count = 0U;
+
+	for (uint64_t i(0U); i < objects_count - deleted_count; ++i) {
+		GameObject::ptr& obj = world.objects[i];
+		if (obj->isDead()) {
+			const uint64_t last_object_rank = objects_count - deleted_count - 1U;
+			GameObject::ptr& last_obj = world.objects[last_object_rank];
+			std::swap(obj, last_obj);
+			++deleted_count;
+			--i;
 		}
 	}
+
+	world.objects.resize(objects_count - deleted_count);
 }
