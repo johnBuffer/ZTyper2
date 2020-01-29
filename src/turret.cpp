@@ -49,9 +49,12 @@ void Turret::findNewTarget(uint32_t code)
 {
 	std::list<Zombie::ptr> potential_targets;
 
+	const float position_threshold = -50.0f;
 	for (Zombie::ptr zombie : Zombie::pool) {
-		if (zombie->getLetter() == code) {
-			potential_targets.push_back(zombie);
+		if (zombie->position.y > position_threshold) {
+			if (zombie->getLetter() == code) {
+				potential_targets.push_back(zombie);
+			}
 		}
 	}
 
@@ -76,17 +79,18 @@ void Turret::resetTarget()
 void Turret::update(float dt)
 {
 	shot_time += dt;
-	const float target_alignement = getTargetAlignement(active_target);
+	const float target_alignment = getTargetAlignment(active_target);
 	if (active_target) {
 		const float rotation_speed = 0.3f * getTimeRatio(dt);
 		orientTowards(active_target, rotation_speed);
 	}
 
 	if (waiting_shots.size()) {
-		if (std::abs(target_alignement) < 0.1f || !active_target) {
+		const float min_alignment = 0.05f;
+		if (std::abs(target_alignment) < min_alignment || !active_target) {
 			shot_time = 0.0f;
 			recoil = 30.0f;
-			GameEngine::getInstance().world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(0.05f)));
+			GameEngine::getInstance().world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(min_alignment)));
 			waiting_shots.pop_back();
 		}
 	}

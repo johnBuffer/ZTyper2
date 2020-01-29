@@ -26,7 +26,7 @@ struct GameObject
 		: GameObject(Vec2(x, y), angle_)
 	{}
 
-	float getTargetAlignement(const GameObject::ptr target) const
+	float getTargetAlignment(const GameObject::ptr target) const
 	{
 		if (!target) {
 			return 1.0f;
@@ -42,7 +42,7 @@ struct GameObject
 
 	void orientTowards(const GameObject::ptr target, float rotation_speed)
 	{
-		angle += getTargetAlignement(target) * rotation_speed;
+		angle += getTargetAlignment(target) * rotation_speed;
 	}
 
 	virtual void update(float dt) {}

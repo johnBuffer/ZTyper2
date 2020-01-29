@@ -80,7 +80,7 @@ void GameEngine::updateObjects(float forced_dt)
 
 void GameEngine::cleanDeadObjects()
 {
-	uint64_t objects_count = world.objects.size();
+	const uint64_t objects_count = world.objects.size();
 	uint64_t deleted_count = 0U;
 
 	for (uint64_t i(0U); i < objects_count - deleted_count; ++i) {
