@@ -14,24 +14,26 @@ struct GameEngine
 
 	GameEngine(uint32_t win_width, uint32_t win_height);
 
-	void update(float dt);
-
+	void update(float forced_dt = 0.0f);
 	void execute_modules(float dt);
-
 	void render_in(sf::RenderTarget& target) const;
 
-	void clear();
+	float getTime() const;
 
 	static GameEngine& getInstance();
 
+
 	GameWorld world;
-	GameRenderer renderer;
+	mutable GameRenderer renderer;
 	ResourcesManager resources;
 	std::list<Module::ptr> modules;
 
 	static GameEngine* global_instance;
 
 private:
+	sf::Clock frame_time;
+	float global_time;
+
 	void updateObjects(float dt);
 	void cleanDeadObjects();
 };

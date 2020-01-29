@@ -29,8 +29,6 @@ int32_t main()
 
     Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, -3.1415926f * 0.5f);
 
-    float time = 0.0f;
-
     Zombie::ptr zombie_1 = Zombie::create(Vec2(0.0f, 0.0f), "alol", turret);
     Zombie::ptr zombie_2 = Zombie::create(Vec2(800.0f, 0.0f), "blol", turret);
     Zombie::ptr zombie_3 = Zombie::create(Vec2(400.0f, -50.0f), "clol", turret);
@@ -53,34 +51,28 @@ int32_t main()
     event_manager.addKeyReleasedCallback(sf::Keyboard::Space, [&](sfev::CstEv) {turret->resetTarget(); });
     event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret->charTyped(ev.text.unicode); });
 
-    sf::Clock frame_clock;
-    float last_zombie = 10.0f;
+    float last_zombie = engine.getTime();
     while (window.isOpen()) {
         const sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
 
         event_manager.processEvents();
 
-        if (last_zombie > 1.5f) {
+        if (engine.getTime() - last_zombie > 1.5f) {
+            last_zombie = engine.getTime();
             const float x_z = static_cast<const float>(rand() % win_width);
             const float y_z = static_cast<const float>(-150 - rand() % 1000);
             engine.world.addObject(Zombie::create(Vec2(x_z, y_z), getRandomElemFromVector(words), turret));
-            last_zombie = 0.0f;
         }
 
         // std::cout << Letter::pool.size() << std::endl;
 
-        const float dt = frame_clock.restart().asSeconds();
-        last_zombie += dt;
-        time += dt;
-        engine.update(dt);
+        engine.update();
 
         window.clear();
         
         engine.render_in(window);
 
         window.display();
-
-        engine.clear();
     }
 
     return 0;

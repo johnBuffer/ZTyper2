@@ -13,6 +13,7 @@ void GameEngine::initialize(uint32_t win_width, uint32_t win_height)
 
 GameEngine::GameEngine(uint32_t win_width, uint32_t win_height)
 	: renderer(win_width, win_height)
+	, global_time(0.0f)
 {
 }
 
@@ -32,15 +33,11 @@ void GameEngine::execute_modules(float dt)
 
 void GameEngine::render_in(sf::RenderTarget& target) const
 {
+	renderer.clear();
 	for (const GameObject::ptr obj : world.objects) {
 		obj->render();
 	}
 	renderer.render(target);
-}
-
-void GameEngine::clear()
-{
-	renderer.clear();
 }
 
 GameEngine& GameEngine::getInstance()
@@ -48,8 +45,15 @@ GameEngine& GameEngine::getInstance()
 	return *global_instance;
 }
 
-void GameEngine::updateObjects(float dt)
+float GameEngine::getTime() const
 {
+	return global_time;
+}
+
+void GameEngine::updateObjects(float forced_dt)
+{
+	const float dt = forced_dt ? forced_dt : frame_time.restart().asSeconds();
+	global_time += dt;
 	world.lock();
 	for (GameObject::ptr object : world.objects) {
 		object->update(dt);
@@ -62,8 +66,7 @@ void GameEngine::cleanDeadObjects()
 {
 	for (auto it = world.objects.begin(); it != world.objects.end(); ++it) {
 		if ((*it)->isDead()) {
-			world.objects.erase(it);
-			--it;
+			world.objects.erase(it--);
 		}
 	}
 }
