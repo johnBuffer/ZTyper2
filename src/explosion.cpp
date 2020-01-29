@@ -37,7 +37,7 @@ void Explosion::update(float dt)
 void Explosion::render() const
 {
 	const uint64_t n = particules.size();
-	auto tva = create_obj<TexturedVa>(sf::Quads, 4 * n);
+	auto tva = create_obj<CustomDrawable>(sf::Quads, 4 * n);
 	tva->rs.texture = &resources.getTexture(0);
 
 	for (uint64_t i(n); i--;) {
@@ -55,7 +55,7 @@ bool Explosion::isDone() const
 void Explosion::onDone()
 {
 	const uint64_t n = particules.size();
-	auto tva = create_obj<TexturedVa>(sf::Quads, 4 * n);
+	auto tva = create_obj<CustomDrawable>(sf::Quads, 4 * n);
 	tva->rs.texture = &resources.getTexture(0);
 
 	for (uint64_t i(n); i--;) {

@@ -1,4 +1,4 @@
-#include "..\include\animation.hpp"
+#include "animation.hpp"
 #include <iostream>
 
 
@@ -21,10 +21,8 @@ Animation::Animation(const sf::Texture& texture_, uint32_t width_, uint32_t heig
 void Animation::applyOn(sf::RectangleShape& shape, float time) const
 {
 	const uint32_t index = loop ? uint32_t(time)%count : static_cast<uint32_t>(std::min((float)count, time));
-
 	const uint32_t tile_x = index % width;
 	const uint32_t tile_y = index / width;
-
 	shape.setTexture(texture);
 	shape.setTextureRect(sf::IntRect(tile_x * tile_size.x, tile_y * tile_size.y, tile_size.x, tile_size.y));
 }

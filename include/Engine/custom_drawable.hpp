@@ -2,19 +2,20 @@
 
 #include <SFML/Graphics.hpp>
 
-
+template<typename T>
 struct CustomDrawable : public sf::Drawable
 {
-	CustomDrawable(sf::PrimitiveType type, uint64_t n)
-		: va(type, n)
+	template<typename... Args>
+	CustomDrawable(Args&&... args)
+		: shape(args...)
 	{
 	}
 
 	void draw(sf::RenderTarget& target, const sf::RenderStates state) const override
 	{
-		target.draw(va, rs);
+		target.draw(shape, rs);
 	}
 
-	sf::VertexArray va;
+	T shape;
 	sf::RenderStates rs;
 };

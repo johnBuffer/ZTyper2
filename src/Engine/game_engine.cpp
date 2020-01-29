@@ -1,4 +1,4 @@
-#include "..\include\game_engine.hpp"
+#include "game_engine.hpp"
 
 
 GameEngine* GameEngine::global_instance = nullptr;

@@ -43,5 +43,10 @@ void Letter::render() const
 	text->setOrigin(bounds.width * 0.5f, bounds.height * 0.5f);
 	text->setRotation(angle);
 	text->setPosition(position.x, position.y);
-	GameEngine::getInstance().renderer.addDrawable(text);
+	GameEngine::getInstance().renderer.addDrawable(text, layer_id);
+}
+
+void Letter::init()
+{
+	layer_id = GameEngine::getInstance().renderer.addLayer();
 }

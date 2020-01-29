@@ -26,8 +26,9 @@ int32_t main()
     Bullet::initialize();
     Turret::initialize();
     Explosion::initialize();
+    Letter::initialize();
 
-    Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, -3.1415926f * 0.5f);
+    Turret::ptr turret = Turret::create(win_width * 0.5f, win_height - 75.0f, -PI * 0.5f);
 
     Zombie::ptr zombie_1 = Zombie::create(Vec2(0.0f, 0.0f), "alol", turret);
     Zombie::ptr zombie_2 = Zombie::create(Vec2(800.0f, 500.0f), "blol", turret);

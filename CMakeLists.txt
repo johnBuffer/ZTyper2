@@ -15,9 +15,12 @@ set(SFML_LIBS "${SFML_LIB_DIR}/sfml-graphics-s.lib"
     "winmm.lib"
 )
 
-set(SOURCES "src/main.cpp")
+file(GLOB ENGINE_SRC_FILES ${PROJECT_SOURCE_DIR}/src/Engine/*.cpp)
+file(GLOB ENGINE_INC_FILES ${PROJECT_SOURCE_DIR}/include/Engine/*.hpp)
+file(GLOB USER_SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB USER_INC_FILES ${PROJECT_SOURCE_DIR}/include/*.hpp)
 
-add_executable(ZTyper2 ${SOURCES})
+add_executable(ZTyper2 ${ENGINE_SRC_FILES} ${ENGINE_INC_FILES} ${USER_SRC_FILES} ${USER_INC_FILES})
 add_definitions(-DSFML_STATIC)
-target_include_directories(ZTyper2 PRIVATE "${SFML_INC_DIR}" "include")
+target_include_directories(ZTyper2 PRIVATE "${SFML_INC_DIR}" "include" "include/Engine")
 target_link_libraries(ZTyper2 ${SFML_LIBS})

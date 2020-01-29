@@ -1,4 +1,4 @@
-#include "..\include\game_renderer.hpp"
+#include "game_renderer.hpp"
 
 
 GameRenderer::GameRenderer(uint32_t win_width, uint32_t win_height)
@@ -60,7 +60,7 @@ void GameRenderer::renderGround(sf::RenderTarget& target) const
 		target.draw(sf::Sprite(*ground_texture));
 	}
 	const sf::Vector2u screen_size = ground.getSize();
-	sf::RectangleShape cache(sf::Vector2f(screen_size.x, screen_size.y));
+	sf::RectangleShape cache(sf::Vector2f(float(screen_size.x), float(screen_size.y)));
 	const uint8_t intensity = 250U;
 	cache.setFillColor(sf::Color(intensity, intensity, intensity));
 	ground.draw(cache, sf::BlendMultiply);

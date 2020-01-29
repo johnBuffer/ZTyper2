@@ -13,6 +13,8 @@ struct Letter : PooledGameObject<Letter>
 
 	void render() const override;
 
+	static void init();
+
 	char glyph;
 	float time;
 	const float max_time = 0.75f;

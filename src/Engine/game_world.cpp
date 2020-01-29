@@ -1,4 +1,4 @@
-#include "..\include\game_world.hpp"
+#include "game_world.hpp"
 
 
 GameWorld::GameWorld()
