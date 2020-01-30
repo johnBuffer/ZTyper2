@@ -25,7 +25,7 @@ inline T& PooledObject<T>::create(Args&& ...args)
 {
 	ptr new_obj = std::make_unique<T>(args...);
 	pool.push_back(std::move(new_obj));
-	return *new_obj;
+	return *pool.back();
 }
 
 template<typename T>

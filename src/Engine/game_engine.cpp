@@ -84,10 +84,10 @@ void GameEngine::cleanDeadObjects()
 	uint64_t deleted_count = 0U;
 
 	for (uint64_t i(0U); i < objects_count - deleted_count; ++i) {
-		GameObject* obj = world.objects[i];
+		GameObject*& obj = world.objects[i];
 		if (obj->isDead()) {
 			const uint64_t last_object_rank = objects_count - deleted_count - 1U;
-			GameObject* last_obj = world.objects[last_object_rank];
+			GameObject*& last_obj = world.objects[last_object_rank];
 			std::swap(obj, last_obj);
 			++deleted_count;
 			--i;

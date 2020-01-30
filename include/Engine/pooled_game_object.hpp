@@ -55,8 +55,8 @@ template<typename T>
 inline void PooledGameObject<T>::checkDead(T* object)
 {
 	if (isDone() || dead) {
-		kill(object);
 		onDone();
+		kill(object);
 	}
 }
 
