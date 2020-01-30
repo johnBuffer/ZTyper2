@@ -7,9 +7,9 @@
 template<typename T>
 struct PooledObject
 {
-	using ptr = std::shared_ptr<T>;
+	using ptr = std::unique_ptr<T>;
 	template<typename... Args>
-	static std::shared_ptr<T> create(Args&&... args);
+	static T& create(Args&&... args);
 
 	static void remove(const T& obj);
 	
@@ -17,15 +17,15 @@ struct PooledObject
 };
 
 template<typename T>
-std::vector<std::shared_ptr<T>> PooledObject<T>::pool;
+std::vector<std::unique_ptr<T>> PooledObject<T>::pool;
 
 template<typename T>
 template<typename ...Args>
-inline std::shared_ptr<T> PooledObject<T>::create(Args&& ...args)
+inline T& PooledObject<T>::create(Args&& ...args)
 {
-	std::shared_ptr<T> new_obj = std::make_shared<T>(args...);
-	pool.push_back(new_obj);
-	return new_obj;
+	ptr new_obj = std::make_unique<T>(args...);
+	pool.push_back(std::move(new_obj));
+	return *new_obj;
 }
 
 template<typename T>

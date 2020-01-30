@@ -15,7 +15,7 @@ Zombie::Zombie()
 {
 }
 
-Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject::ptr target_)
+Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject* target_)
 	: PooledGameObject(position_, 0.0f)
 	, word(word_)
 	, active_target(target_)

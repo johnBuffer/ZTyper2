@@ -8,7 +8,7 @@ struct GameWorld
 {
 	GameWorld();
 
-	void addObject(GameObject::ptr object);
+	void addObject(GameObject& object);
 
 private:
 	friend struct GameEngine;
@@ -19,6 +19,6 @@ private:
 	void unlock();
 	void addWaitingObjects();
 
-	std::vector<GameObject::ptr> objects;
-	std::vector<GameObject::ptr> waiting_add;
+	std::vector<GameObject*> objects;
+	std::vector<GameObject*> waiting_add;
 };

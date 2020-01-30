@@ -17,7 +17,7 @@ Turret::Turret(float x, float y, float angle)
 {
 }
 
-void Turret::aim_at(Zombie::ptr target)
+void Turret::aim_at(Zombie* target)
 {
 	active_target = target;
 }
@@ -47,20 +47,20 @@ void Turret::shoot(uint32_t code)
 
 void Turret::findNewTarget(uint32_t code)
 {
-	std::list<Zombie::ptr> potential_targets;
+	std::list<Zombie*> potential_targets;
 
 	const float position_threshold = -50.0f;
-	for (Zombie::ptr zombie : Zombie::pool) {
+	for (Zombie::ptr& zombie : Zombie::pool) {
 		if (zombie->position.y > position_threshold) {
 			if (zombie->getLetter() == code) {
-				potential_targets.push_back(zombie);
+				potential_targets.push_back(&(*zombie));
 			}
 		}
 	}
 
-	Zombie::ptr next_target = nullptr;
+	Zombie* next_target = nullptr;
 	float min_dist = -1.0f;
-	for (Zombie::ptr zombie : potential_targets) {
+	for (Zombie* zombie : potential_targets) {
 		const float dist = getDistance(position, zombie->position);
 		if (dist < min_dist || min_dist == -1.0f) {
 			min_dist = dist;
@@ -184,11 +184,11 @@ void Turret::checkZombiesCollisions()
 	const float min_dist = 2.0f * z_radius;
 	uint64_t z_count = Zombie::pool.size();
 	for (uint64_t i(0U); i < z_count; ++i) {
-		Zombie::ptr z1 = Zombie::pool[i];
-		const Vec2 z_to_turret = position - z1->position;
+		Zombie& z1 = *Zombie::pool[i];
+		const Vec2 z_to_turret = position - z1.position;
 		const float distance = z_to_turret.getLength();
 		if (distance < min_dist) {
-			z1->setDead(&(*z1));
+			z1.setDead(&(z1));
 			--life;
 			std::cout << life << std::endl;
 		}

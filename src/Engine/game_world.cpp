@@ -16,13 +16,13 @@ void GameWorld::unlock()
 	add_lock = false;
 }
 
-void GameWorld::addObject(GameObject::ptr object)
+void GameWorld::addObject(GameObject& object)
 {
 	if (!add_lock) {
-		objects.push_back(object);
+		objects.push_back(&object);
 	}
 	else {
-		waiting_add.push_back(object);
+		waiting_add.push_back(&object);
 	}
 }
 

@@ -8,10 +8,10 @@
 
 struct Zombie : public PooledGameObject<Zombie>
 {
-	using ptr = std::shared_ptr<Zombie>;
+	using ptr = std::unique_ptr<Zombie>;
 
 	Zombie();
-	Zombie(const Vec2& position_, const std::string& word_, const GameObject::ptr target_);
+	Zombie(const Vec2& position_, const std::string& word_, GameObject* target_);
 
 	char getLetter() const;
 	void shoot(const Vec2& recoil);
@@ -33,7 +33,7 @@ struct Zombie : public PooledGameObject<Zombie>
 	uint64_t life;
 	std::string word;
 	std::string shot_letters;
-	GameObject::ptr active_target;
+	GameObject* active_target;
 
 	static Animation walk_animation;
 

@@ -9,12 +9,12 @@
 
 struct Turret : public PooledGameObject<Turret>
 {
-	using ptr = std::shared_ptr<Turret>;
+	using ptr = std::unique_ptr<Turret>;
 	Turret() = default;
 	Turret(float x, float y, float angle);
 	
 	// Turret specific
-	void aim_at(Zombie::ptr target);
+	void aim_at(Zombie* target);
 	void charTyped(uint32_t code);
 	void shoot(uint32_t code);
 	void findNewTarget(uint32_t code);
@@ -30,8 +30,8 @@ struct Turret : public PooledGameObject<Turret>
 	static void init();
 
 private:
-	Zombie::ptr active_target;
-	std::vector<Zombie::ptr> waiting_shots;
+	Zombie* active_target;
+	std::vector<Zombie*> waiting_shots;
 
 	static Animation fire_animation;
 

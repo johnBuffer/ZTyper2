@@ -42,7 +42,7 @@ void GameEngine::execute_modules(float dt)
 
 void GameEngine::render_in(sf::RenderTarget& target) const
 {
-	for (const GameObject::ptr obj : world.objects) {
+	for (const GameObject* obj : world.objects) {
 		obj->render();
 	}
 	renderer.render(target);
@@ -71,7 +71,7 @@ void GameEngine::updateObjects(float forced_dt)
 	const float dt = forced_dt ? forced_dt : frame_time.restart().asSeconds();
 	global_time += dt;
 	world.lock();
-	for (GameObject::ptr object : world.objects) {
+	for (GameObject* object : world.objects) {
 		object->update(dt);
 	}
 	cleanDeadObjects();
@@ -84,10 +84,10 @@ void GameEngine::cleanDeadObjects()
 	uint64_t deleted_count = 0U;
 
 	for (uint64_t i(0U); i < objects_count - deleted_count; ++i) {
-		GameObject::ptr& obj = world.objects[i];
+		GameObject* obj = world.objects[i];
 		if (obj->isDead()) {
 			const uint64_t last_object_rank = objects_count - deleted_count - 1U;
-			GameObject::ptr& last_obj = world.objects[last_object_rank];
+			GameObject* last_obj = world.objects[last_object_rank];
 			std::swap(obj, last_obj);
 			++deleted_count;
 			--i;

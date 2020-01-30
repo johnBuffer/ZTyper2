@@ -3,7 +3,7 @@
 #include "utils.hpp"
 
 
-Bullet::Bullet(const Vec2& position_, Zombie::ptr target, float angle_)
+Bullet::Bullet(const Vec2& position_, Zombie* target, float angle_)
 	: PooledGameObject(position_, angle_)
 	, direction(cos(angle_), sin(angle_))
 	, active_target(target)

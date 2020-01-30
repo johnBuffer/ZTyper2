@@ -8,7 +8,7 @@
 
 struct GameObject
 {
-	using ptr = std::shared_ptr<GameObject>;
+	using ptr = std::unique_ptr<GameObject>;
 
 	GameObject()
 		: position(0.0f, 0.0f)
@@ -26,7 +26,7 @@ struct GameObject
 		: GameObject(Vec2(x, y), angle_)
 	{}
 
-	float getTargetAlignment(const GameObject::ptr target) const
+	float getTargetAlignment(const GameObject* target) const
 	{
 		if (!target) {
 			return 1.0f;
@@ -40,7 +40,7 @@ struct GameObject
 		return dot(to_target, normal);
 	}
 
-	void orientTowards(const GameObject::ptr target, float rotation_speed)
+	void orientTowards(const GameObject* target, float rotation_speed)
 	{
 		angle += getTargetAlignment(target) * rotation_speed;
 	}
