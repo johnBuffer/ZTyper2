@@ -2,6 +2,7 @@
 #include "utils.hpp"
 
 #include <iostream>
+#include <limits>
 #include "bullet.hpp"
 
 
@@ -11,7 +12,7 @@ Turret::Turret(float x, float y, float angle)
 	: PooledGameObject(x, y, angle)
 	, active_target(nullptr)
 	, waiting_shots(0U)
-	, shot_time(0.0f)
+	, shot_time(std::numeric_limits<float>::max())
 	, recoil(0.0f)
 	, life(1)
 {
@@ -100,8 +101,6 @@ void Turret::update(float dt)
 	const float recover_speed = 70.0f;
 	const float recover_amount = dt * recover_speed;
 	recoil = recoil > recover_amount ? recoil - recover_amount : 0.0f;
-
-	checkDead(this);
 }
 
 void Turret::render() const
