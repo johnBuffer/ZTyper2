@@ -5,6 +5,7 @@
 #include <limits>
 #include "bullet.hpp"
 #include <Engine/sound_player.hpp>
+#include "smoke.hpp"
 
 
 Animation Turret::fire_animation;
@@ -32,48 +33,39 @@ void Turret::charTyped(uint32_t code)
 		findNewTarget(code);
 	}
 
-	shoot(code);
+	if (code < 128) {
+		const char letter = active_target->getLetter();
+		if (letter == char(code)) {
+			shoot(code);
+		}
+	}
 }
 
 void Turret::shoot(uint32_t code)
 {
-	if (active_target && code < 128) {
-		const char letter = active_target->getLetter();
-		if (letter == char(code)) {
-			SoundPlayer::playInstanceOf(fire_sound);
-			active_target->removeLetter();
-			waiting_shots.push_back(active_target);
-			if (active_target->isWordDone()) {
-				active_target = nullptr;
-			}
-		}
+	SoundPlayer::playInstanceOf(fire_sound);
+	active_target->removeLetter();
+	waiting_shots.push_back(active_target);
+
+	if (active_target->isWordDone()) {
+		active_target = nullptr;
 	}
 }
 
 void Turret::findNewTarget(uint32_t code)
 {
-	std::list<Zombie*> potential_targets;
-
+	active_target = nullptr;
 	const float position_threshold = -50.0f;
+	float min_y = position_threshold;
 	for (Zombie::ptr& zombie : Zombie::pool) {
-		if (zombie->position.y > position_threshold) {
-			if (zombie->getLetter() == code) {
-				potential_targets.push_back(&(*zombie));
+		const float zombie_y = zombie->position.y;
+		if (zombie_y > position_threshold) {
+			if (zombie->getLetter() == code && zombie_y > min_y) {
+				active_target = &(*zombie);
+				min_y = zombie_y;
 			}
 		}
 	}
-
-	Zombie* next_target = nullptr;
-	float min_dist = -1.0f;
-	for (Zombie* zombie : potential_targets) {
-		const float dist = getDistance(position, zombie->position);
-		if (dist < min_dist || min_dist == -1.0f) {
-			min_dist = dist;
-			next_target = zombie;
-		}
-	}
-
-	active_target = next_target;
 }
 
 void Turret::resetTarget()
@@ -95,7 +87,10 @@ void Turret::update(float dt)
 		if (std::abs(target_alignment) < min_alignment || !active_target) {
 			shot_time = 0.0f;
 			recoil = 30.0f;
-			GameEngine::getInstance().world.addObject(Bullet::create(position, waiting_shots.back(), angle + getRandRange(min_alignment)));
+			GameEngine& engine = GameEngine::getInstance();
+			Bullet bullet = Bullet::create(position, waiting_shots.back(), angle + getRandRange(min_alignment));
+			engine.world.addObject(bullet);
+			engine.world.addObject(Smoke::create(position, bullet.direction * 10.0f));
 			waiting_shots.pop_back();
 		}
 	}
