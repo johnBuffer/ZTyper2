@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "turret.hpp"
 #include "zombie.hpp"
-#include "game_engine.hpp"
+#include "Engine/game_engine.hpp"
 #include "bullet.hpp"
 #include "explosion.hpp"
 #include "letter.hpp"
@@ -53,16 +53,18 @@ int32_t main()
     event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret.charTyped(ev.text.unicode); });
 
     float last_zombie = engine.getTime();
+	uint32_t zombies_count = 0u;
     while (!turret.isDone()) {
         const sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
 
         event_manager.processEvents();
 
         if (engine.getTime() - last_zombie > 1.5f) {
+			++zombies_count;
             last_zombie = engine.getTime();
             const float x_z = static_cast<const float>(rand() % win_width);
             const float y_z = static_cast<const float>(-150 - rand() % 1000);
-            engine.world.addObject(Zombie::create(Vec2(x_z, y_z), getRandomElemFromVector(words), &turret));
+            engine.world.addObject(Zombie::create(Vec2(x_z, y_z), getRandomElemFromVector(words), &turret, 1.0f + zombies_count / 100.0f));
         }
 
         // std::cout << Letter::pool.size() << std::endl;

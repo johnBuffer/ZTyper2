@@ -15,12 +15,13 @@ Zombie::Zombie()
 {
 }
 
-Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject* target_)
+Zombie::Zombie(const Vec2& position_, const std::string& word_, GameObject* target_, float speed)
 	: PooledGameObject(position_, 0.0f)
 	, word(word_)
 	, active_target(target_)
 	, life(word_.size())
 	, walk_time(0.0f)
+	, walk_speed(speed)
 {
 }
 
@@ -71,8 +72,8 @@ void Zombie::update(float dt)
 {
 	if (active_target) {
 		orientTowards(active_target, 0.05f * getTimeRatio(dt));
-		walk_time += getTimeRatio(dt);
-		const float speed = 1.0f * getTimeRatio(dt);
+		const float speed = walk_speed * getTimeRatio(dt);
+		walk_time += speed * getTimeRatio(dt);
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
 	}

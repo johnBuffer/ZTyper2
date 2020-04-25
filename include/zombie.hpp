@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pooled_game_object.hpp"
-#include "animation.hpp"
+#include "Engine/pooled_game_object.hpp"
+#include "Engine/animation.hpp"
 #include <string>
 #include <list>
 
@@ -11,7 +11,7 @@ struct Zombie : public PooledGameObject<Zombie>
 	using ptr = std::unique_ptr<Zombie>;
 
 	Zombie();
-	Zombie(const Vec2& position_, const std::string& word_, GameObject* target_);
+	Zombie(const Vec2& position_, const std::string& word_, GameObject* target_, float speed = 1.0f);
 
 	char getLetter() const;
 	void shoot(const Vec2& recoil);
@@ -34,6 +34,7 @@ struct Zombie : public PooledGameObject<Zombie>
 	std::string word;
 	std::string shot_letters;
 	GameObject* active_target;
+	float walk_speed;
 
 	static Animation walk_animation;
 

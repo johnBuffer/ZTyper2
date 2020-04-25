@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pooled_game_object.hpp"
+#include "Engine/pooled_game_object.hpp"
 
 
 struct Smoke : PooledGameObject<Smoke>
@@ -14,4 +14,6 @@ struct Smoke : PooledGameObject<Smoke>
 	void onDone() override;
 
 	static void init();
+
+	Vec2 speed;
 };
