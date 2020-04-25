@@ -4,9 +4,12 @@
 #include <iostream>
 #include <limits>
 #include "bullet.hpp"
+#include <Engine/sound_player.hpp>
 
 
 Animation Turret::fire_animation;
+std::size_t Turret::fire_sound;
+
 
 Turret::Turret(float x, float y, float angle)
 	: PooledGameObject(x, y, angle)
@@ -37,6 +40,7 @@ void Turret::shoot(uint32_t code)
 	if (active_target && code < 128) {
 		const char letter = active_target->getLetter();
 		if (letter == char(code)) {
+			SoundPlayer::playInstanceOf(fire_sound);
 			active_target->removeLetter();
 			waiting_shots.push_back(active_target);
 			if (active_target->isWordDone()) {
@@ -174,6 +178,7 @@ void Turret::init()
 	resources.registerTexture("resources/textures/explosion.png");
 
 	fire_animation = Animation(resources.getTexture(2), 1, 19, 19, false);
+	fire_sound = SoundPlayer::registerSound("fire1.wav");
 }
 
 void Turret::checkZombiesCollisions()

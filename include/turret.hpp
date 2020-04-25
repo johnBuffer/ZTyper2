@@ -34,6 +34,7 @@ private:
 	std::vector<Zombie*> waiting_shots;
 
 	static Animation fire_animation;
+	static std::size_t fire_sound;
 
 	int32_t life;
 	float shot_time;
