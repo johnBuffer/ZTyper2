@@ -19,7 +19,7 @@ int32_t main()
     const uint32_t win_width(1600);
     const uint32_t win_height(900);
 
-    sf::RenderWindow window(sf::VideoMode(win_width, win_height), "ZTyper2", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(win_width, win_height), "ZTyper2", sf::Style::Default);
     window.setFramerateLimit(60);
 
     // Various initializations
