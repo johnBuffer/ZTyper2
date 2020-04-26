@@ -45,3 +45,8 @@ float getTimeRatio(float dt)
 {
 	return dt/0.016f;
 }
+
+float getDecrease(float x, float power)
+{
+	return 2.0f / (1.0f + std::exp(-x*6)) - 1.0f;
+}

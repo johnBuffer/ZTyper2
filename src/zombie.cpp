@@ -2,10 +2,16 @@
 #include "utils.hpp"
 #include "letter.hpp"
 #include "explosion.hpp"
+#include "smoke.hpp"
+#include <Engine/sound_player.hpp>
 #include <iostream>
 
 
 Animation Zombie::walk_animation;
+uint64_t Zombie::paf_sound;
+uint64_t Zombie::dead_sound;
+std::vector<size_t> Zombie::gr_sounds;
+
 
 Zombie::Zombie()
 	: PooledGameObject()
@@ -41,8 +47,12 @@ void Zombie::shoot(const Vec2& recoil)
 	shot_letters = shot_letters.substr(1);
 	const float word_width = getShotWidth() + getRemainingWidth();
 	const Vec2 letter_position(position.x - word_width * 0.5f, position.y + 30.0f);
-	GameEngine::getInstance().world.addObject(Letter::create(letter_position, letter));
+	const Vec2 smoke_position(position.x - word_width * 0.5f, position.y + 70.0f);
+	GameEngine::getInstance().world.addObject(Letter::create(smoke_position, letter));
+	GameEngine::getInstance().world.addObject(Smoke::create(smoke_position, 0.0f, 0.0f, 100.0f));
+	GameEngine::getInstance().world.addObject(Smoke::create(smoke_position, 0.0f, 0.0f, 100.0f));
 	position += recoil;
+	SoundPlayer::playInstanceOf(paf_sound, 5.0f);
 }
 
 void Zombie::removeLetter()
@@ -76,6 +86,10 @@ void Zombie::update(float dt)
 		walk_time += speed * getTimeRatio(dt);
 		const Vec2 direction = (active_target->position - position).getNormalized();
 		position += direction * speed;
+	}
+
+	if (getRandUnder(500) < 1) {
+		SoundPlayer::playInstanceOf(getRandomElemFromVector(gr_sounds), 1.0f);
 	}
 
 	checkDead(this);
@@ -142,6 +156,8 @@ void Zombie::onDone()
 	GameEngine::getInstance().world.addObject(Explosion::create(position, 10, 40.0f, 0.5f, true));
 	GameEngine::getInstance().world.addObject(Explosion::create(position, 40, 80.0f, 0.5f));
 	GameEngine::getInstance().world.addObject(Explosion::create(position, 40, 160.0f, 0.25f));
+
+	SoundPlayer::playInstanceOf(dead_sound);
 }
 
 void Zombie::init()
@@ -150,4 +166,11 @@ void Zombie::init()
 	resources.registerTexture("resources/textures/shadow.png");
 
 	walk_animation = Animation(resources.getTexture(0), 3, 6, 17);
+	paf_sound = SoundPlayer::registerSound("resources/sounds/paf.wav");
+	dead_sound = SoundPlayer::registerSound("resources/sounds/plaf.wav");
+
+	gr_sounds.resize(3);
+	gr_sounds[0] = SoundPlayer::registerSound("resources/sounds/gr1.wav");
+	gr_sounds[1] = SoundPlayer::registerSound("resources/sounds/gr2.wav");
+	gr_sounds[2] = SoundPlayer::registerSound("resources/sounds/gr3.wav");
 }

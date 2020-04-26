@@ -10,6 +10,8 @@
 
 Animation Turret::fire_animation;
 std::size_t Turret::fire_sound;
+std::size_t Turret::bullet_sound;
+std::vector<size_t> Turret::shell_sounds;
 
 
 Turret::Turret(float x, float y, float angle)
@@ -33,17 +35,16 @@ void Turret::charTyped(uint32_t code)
 		findNewTarget(code);
 	}
 
-	if (code < 128) {
+	if (code < 128 && active_target) {
 		const char letter = active_target->getLetter();
 		if (letter == char(code)) {
-			shoot(code);
+			shoot();
 		}
 	}
 }
 
-void Turret::shoot(uint32_t code)
+void Turret::shoot()
 {
-	SoundPlayer::playInstanceOf(fire_sound);
 	active_target->removeLetter();
 	waiting_shots.push_back(active_target);
 
@@ -83,14 +84,34 @@ void Turret::update(float dt)
 	}
 
 	if (waiting_shots.size()) {
-		const float min_alignment = 0.05f;
+		const float min_alignment = 0.02f;
 		if (std::abs(target_alignment) < min_alignment || !active_target) {
 			shot_time = 0.0f;
 			recoil = 30.0f;
+			SoundPlayer::playInstanceOf(fire_sound);
+			SoundPlayer::playInstanceOf(bullet_sound);
+			SoundPlayer::playInstanceOf(getRandomElemFromVector(shell_sounds));
 			GameEngine& engine = GameEngine::getInstance();
-			Bullet bullet = Bullet::create(position, waiting_shots.back(), angle + getRandRange(min_alignment));
+			Bullet& bullet = Bullet::create(position, waiting_shots.back(), angle + getRandRange(min_alignment));
 			engine.world.addObject(bullet);
-			engine.world.addObject(Smoke::create(position, bullet.direction * 10.0f));
+
+			const float angle_var = 0.35f;
+			const Vec2 out_barrel_pos = position + Vec2(cos(angle), sin(angle)) * 100.0f;
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle + getRandRange(angle_var), 180.0f, 80.0f));
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle + getRandRange(angle_var), 100.0f, 100.0f));
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle + getRandRange(angle_var), 70.0f, 120.0f));
+
+			const float h_pi = 3.141592653f * 0.5f;
+			const float lat_size = 30.0f;
+			const float angle_var_lat = 0.25f;
+
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle + h_pi + getRandRange(angle_var_lat), 80.0f, lat_size));
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle + h_pi + getRandRange(angle_var_lat), 60.0f, lat_size * 1.5f));
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle + h_pi + getRandRange(angle_var_lat), 20.0f, lat_size * 2.5f));
+
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle - h_pi + getRandRange(angle_var_lat), 80.0f, lat_size));
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle - h_pi + getRandRange(angle_var_lat), 60.0f, lat_size * 1.5f));
+			engine.world.addObject(Smoke::create(out_barrel_pos, angle - h_pi + getRandRange(angle_var_lat), 20.0f, lat_size * 2.5f));
 			waiting_shots.pop_back();
 		}
 	}
@@ -173,7 +194,11 @@ void Turret::init()
 	resources.registerTexture("resources/textures/explosion.png");
 
 	fire_animation = Animation(resources.getTexture(2), 1, 19, 19, false);
-	fire_sound = SoundPlayer::registerSound("fire1.wav");
+	fire_sound = SoundPlayer::registerSound("resources/sounds/fire1.wav");
+	bullet_sound = SoundPlayer::registerSound("resources/sounds/bullet.wav");
+
+	shell_sounds.resize(1);
+	shell_sounds[0] = SoundPlayer::registerSound("resources/sounds/shell.wav");
 }
 
 void Turret::checkZombiesCollisions()
@@ -189,7 +214,6 @@ void Turret::checkZombiesCollisions()
 		if (distance < min_dist) {
 			z1.setDead(&(z1));
 			--life;
-			std::cout << life << std::endl;
 		}
 	}
 }

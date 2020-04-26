@@ -39,4 +39,7 @@ struct Zombie : public PooledGameObject<Zombie>
 	static Animation walk_animation;
 
 	const uint32_t character_size = 32U;
+	static uint64_t paf_sound;
+	static uint64_t dead_sound;
+	static std::vector<size_t> gr_sounds;
 };

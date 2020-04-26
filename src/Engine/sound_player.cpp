@@ -2,6 +2,7 @@
 
 
 std::vector<SoundHandler> SoundPlayer::_buffers;
+float SoundPlayer::s_pitch = 1.0f;
 
 void SoundHandler::update()
 {
@@ -18,7 +19,7 @@ size_t SoundPlayer::registerSound(const std::string& filename, size_t maxSounds)
     return _buffers.size()-1;
 }
 
-void SoundPlayer::playInstanceOf(size_t soundID)
+void SoundPlayer::playInstanceOf(size_t soundID, float volume)
 {
     SoundHandler& handler = _buffers[soundID];
     std::list<sf::Sound>& soundList(handler.livingSounds);
@@ -26,7 +27,8 @@ void SoundPlayer::playInstanceOf(size_t soundID)
     soundList.push_back(sf::Sound());
     sf::Sound& newSound = soundList.back();
     newSound.setBuffer(_buffers[soundID].soundBuffer);
-	newSound.setVolume(20.0f);
+	newSound.setVolume(volume);
+	newSound.setPitch(s_pitch);
     newSound.play();
 
     if (soundList.size() > handler.maxLivingSounds)
@@ -36,6 +38,16 @@ void SoundPlayer::playInstanceOf(size_t soundID)
     }
 
     handler.update();
+}
+
+void SoundPlayer::setPitch(float pitch)
+{
+	s_pitch = pitch;
+	for (SoundHandler& sh : _buffers) {
+		for (sf::Sound& snd : sh.livingSounds) {
+			snd.setPitch(pitch);
+		}
+	}
 }
 
 sf::Sound SoundPlayer::getInstanceOf(size_t soundID)

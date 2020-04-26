@@ -16,7 +16,7 @@ struct Turret : public PooledGameObject<Turret>
 	// Turret specific
 	void aim_at(Zombie* target);
 	void charTyped(uint32_t code);
-	void shoot(uint32_t code);
+	void shoot();
 	void findNewTarget(uint32_t code);
 	void resetTarget();
 
@@ -34,7 +34,8 @@ private:
 	std::vector<Zombie*> waiting_shots;
 
 	static Animation fire_animation;
-	static std::size_t fire_sound;
+	static std::size_t fire_sound, bullet_sound;
+	static std::vector<size_t> shell_sounds;
 
 	int32_t life;
 	float shot_time;
