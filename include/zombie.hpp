@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pooled_game_object.hpp"
-#include "animation.hpp"
+#include "Engine/pooled_game_object.hpp"
+#include "Engine/animation.hpp"
 #include <string>
 #include <list>
 
