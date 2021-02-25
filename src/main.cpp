@@ -8,7 +8,7 @@
 #include "utils.hpp"
 #include "zombie_physics.hpp"
 #include "smoke.hpp"
-#include <event_manager.hpp>
+#include "event_manager.hpp"
 #include <Engine/sound_player.hpp>
 
 #include <iostream>
