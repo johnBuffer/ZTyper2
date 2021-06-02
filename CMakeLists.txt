@@ -4,6 +4,7 @@ project(${PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 file(GLOB source_files
 	"src/*.cpp"
+   "src/Engine/*.cpp"
 )
 
 set(SOURCES ${source_files})
@@ -22,7 +23,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 add_executable(${PROJECT_NAME} ${WIN32_GUI} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE "include")
+target_include_directories(${PROJECT_NAME} PRIVATE "include" "include/Engine")
 set(SFML_LIBS sfml-system sfml-window sfml-graphics)
 target_link_libraries(${PROJECT_NAME} ${SFML_LIBS})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)

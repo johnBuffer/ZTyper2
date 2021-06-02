@@ -9,7 +9,6 @@
 #include "zombie_physics.hpp"
 #include "smoke.hpp"
 #include "event_manager.hpp"
-#include <Engine/sound_player.hpp>
 
 #include <iostream>
 
@@ -49,8 +48,8 @@ int32_t main()
     sfev::EventManager event_manager(window);
     event_manager.addEventCallback(sf::Event::Closed, [&](sfev::CstEv) {window.close(); });
 	event_manager.addKeyReleasedCallback(sf::Keyboard::Space, [&](sfev::CstEv) {turret.resetTarget(); });
-	event_manager.addKeyReleasedCallback(sf::Keyboard::Up, [&](sfev::CstEv) {SoundPlayer::setPitch(speed_down);  dt = 0.016f * speed_down; });
-	event_manager.addKeyReleasedCallback(sf::Keyboard::Down, [&](sfev::CstEv) {SoundPlayer::setPitch(1.0f);  dt = 0.016f; });
+	event_manager.addKeyReleasedCallback(sf::Keyboard::Up, [&](sfev::CstEv) {dt = 0.016f * speed_down; });
+	event_manager.addKeyReleasedCallback(sf::Keyboard::Down, [&](sfev::CstEv) {dt = 0.016f; });
     event_manager.addEventCallback(sf::Event::TextEntered, [&](sfev::CstEv ev) {turret.charTyped(ev.text.unicode); });
 
     float last_zombie = engine.getTime();

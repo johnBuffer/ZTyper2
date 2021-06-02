@@ -4,14 +4,10 @@
 #include <iostream>
 #include <limits>
 #include "bullet.hpp"
-#include <Engine/sound_player.hpp>
 #include "smoke.hpp"
 
 
 Animation Turret::fire_animation;
-std::size_t Turret::fire_sound;
-std::size_t Turret::bullet_sound;
-std::vector<size_t> Turret::shell_sounds;
 
 
 Turret::Turret(float x, float y, float angle)
@@ -88,9 +84,6 @@ void Turret::update(float dt)
 		if (std::abs(target_alignment) < min_alignment || !active_target) {
 			shot_time = 0.0f;
 			recoil = 30.0f;
-			SoundPlayer::playInstanceOf(fire_sound);
-			SoundPlayer::playInstanceOf(bullet_sound);
-			SoundPlayer::playInstanceOf(getRandomElemFromVector(shell_sounds));
 			GameEngine& engine = GameEngine::getInstance();
 			Bullet& bullet = Bullet::create(position, waiting_shots.back(), angle + getRandRange(min_alignment));
 			engine.world.addObject(bullet);
@@ -194,11 +187,6 @@ void Turret::init()
 	resources.registerTexture("resources/textures/explosion.png");
 
 	fire_animation = Animation(resources.getTexture(2), 1, 19, 19, false);
-	fire_sound = SoundPlayer::registerSound("resources/sounds/fire1.wav");
-	bullet_sound = SoundPlayer::registerSound("resources/sounds/bullet.wav");
-
-	shell_sounds.resize(1);
-	shell_sounds[0] = SoundPlayer::registerSound("resources/sounds/shell.wav");
 }
 
 void Turret::checkZombiesCollisions()

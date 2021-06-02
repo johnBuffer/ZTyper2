@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include <cmath>
 
 
 constexpr float PI = 3.1415928f;
