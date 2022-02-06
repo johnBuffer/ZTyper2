@@ -2,7 +2,7 @@
 
 
 GameRenderer::GameRenderer(uint32_t win_width, uint32_t win_height)
-	: blur(win_width, win_height, 0.5f)
+	: blur({win_width, win_height}, 2, 0.5f)
 	, ground_texture(nullptr)
 {
 	// Adding default layer
@@ -74,7 +74,7 @@ void GameRenderer::renderBloom(sf::RenderTarget& target) const
 	bloom.clear();
 	layers[RenderTarget::Bloom].render(bloom);
 	bloom.display();
-	target.draw(blur.apply(bloom.getTexture(), 1U), sf::BlendAdd);
+	target.draw(blur.apply(bloom.getTexture()), sf::BlendAdd);
 }
 
 void RenderLayer::render(sf::RenderTarget& target) const

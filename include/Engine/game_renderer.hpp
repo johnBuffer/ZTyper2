@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <dynamic_blur.hpp>
+#include "Engine/dynamic_blur.hpp"
 #include <vector>
 #include <memory>
 
