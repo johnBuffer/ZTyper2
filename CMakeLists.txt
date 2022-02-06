@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJECT_NAME ZTyper)
+set(PROJECT_NAME ZTyper2)
 project(${PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 file(GLOB_RECURSE source_files
