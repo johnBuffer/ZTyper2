@@ -71,7 +71,7 @@ template<typename T>
 inline void PooledGameObject<T>::clean()
 {
 	resources.clear();
-	pool.clear();
+	PooledObject<T>::pool.clear();
 }
 
 template<typename T>
